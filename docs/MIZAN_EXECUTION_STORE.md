@@ -7,11 +7,12 @@
 ## Invariants
 
 1. **Immutable identity:** an `execution_id` is bound to one `intent_id`, one `idempotency_key`, and one SHA-256 request digest. Reusing the ID with different data is rejected.
-2. **Single claim:** `claim_once` takes a SQLite `BEGIN IMMEDIATE` transaction and changes only `PENDING → CLAIMED`. Competing claimants cannot both win.
+2. **Single claim:** `claim_once` takes a SQLite `BEGIN IMMEDIATE` transaction and changes only `PENDING → CLAIMED`. Competing claimants cannot both win; the general transition API cannot bypass claim acquisition.
 3. **No automatic reclaim:** `CLAIMED` is never returned to `PENDING` by this API. A process restart or lost worker is not proof that no side effect occurred.
 4. **Unknown remains terminal:** `UNKNOWN` cannot be reopened. Investigate/reconcile the external system and create a new explicitly linked intent after evidence establishes the prior outcome.
 5. **Compare-and-set transitions:** callers provide the expected current state; stale or conflicting transitions fail.
-6. **Audit trail:** each state change adds an event to a global SHA-256 hash chain. The verifier checks event sequence, hash links, legal per-execution transitions, event coverage, and agreement between the final event and each current execution row.
+6. **Claim-owner consistency:** transitions from `CLAIMED` or `RUNNING` require the supplied actor label to match the recorded worker ID. This prevents accidental cross-worker transitions through the library; it is not authentication because the actor label is caller-supplied.
+7. **Audit trail:** each state change adds an event to a global SHA-256 hash chain. The verifier checks event sequence, hash links, legal per-execution transitions, event coverage, and agreement between the final event and each current execution row.
 
 ## Allowed transitions
 
@@ -26,6 +27,7 @@ This model intentionally has no automatic retry path. Retry policy, if ever requ
 
 `tests/test_mizan_execution_store.py` covers:
 - concurrent attempts to claim one execution (24 callers; exactly one winner expected);
+- bypass prevention for `claim_once` and claim-owner consistency for `CLAIMED/RUNNING` transitions;
 - immutable execution identity and idempotency-key ownership;
 - terminal `UNKNOWN` behavior;
 - compare-and-set rejection of stale status;
