@@ -54,6 +54,8 @@ class SQLiteAuditLedger:
         con.row_factory = sqlite3.Row
         con.execute("PRAGMA busy_timeout = 15000")
         con.execute("PRAGMA foreign_keys = ON")
+        # Use full commit durability for this audit reference ledger.
+        con.execute("PRAGMA synchronous = FULL")
         return con
 
     def _initialize(self) -> None:
