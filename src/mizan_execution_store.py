@@ -301,11 +301,17 @@ class SQLiteExecutionStore:
             con.close()
 
     def verify_event_chain(self) -> dict[str, Any]:
+        """Verify hash links, legal per-execution transitions, and current snapshots."""
         with self._connect() as con:
             rows = con.execute(
                 "SELECT * FROM execution_events ORDER BY event_seq"
             ).fetchall()
+            executions = con.execute(
+                "SELECT execution_id, status FROM executions"
+            ).fetchall()
+
         expected_prev = GENESIS
+        last_status: dict[str, str] = {}
         verified = 0
         for expected_seq, row in enumerate(rows, start=1):
             if row["event_seq"] != expected_seq:
@@ -324,7 +330,38 @@ class SQLiteExecutionStore:
             if row["hash"] != actual:
                 return {"ok": False, "reason": "EVENT_HASH_MISMATCH",
                         "verified_events": verified}
+
+            execution_id = row["execution_id"]
+            target = row["to_status"]
+            source = row["from_status"]
+            if execution_id not in last_status:
+                if source is not None or target != ExecutionStatus.PENDING.value:
+                    return {"ok": False, "reason": "INVALID_INITIAL_STATE",
+                            "verified_events": verified}
+            else:
+                current = last_status[execution_id]
+                if source != current:
+                    return {"ok": False, "reason": "EVENT_STATE_DISCONTINUITY",
+                            "verified_events": verified}
+                try:
+                    legal = ExecutionStatus(target) in _ALLOWED[ExecutionStatus(current)]
+                except (ValueError, KeyError):
+                    legal = False
+                if not legal:
+                    return {"ok": False, "reason": "ILLEGAL_STATE_TRANSITION",
+                            "verified_events": verified}
+            last_status[execution_id] = target
             expected_prev = actual
             verified += 1
-        return {"ok": True, "reason": "EVENT_CHAIN_CONSISTENT",
-                "verified_events": verified, "tip_hash": expected_prev}
+
+        snapshot = {row["execution_id"]: row["status"] for row in executions}
+        if set(snapshot) != set(last_status):
+            return {"ok": False, "reason": "EXECUTION_EVENT_COVERAGE_MISMATCH",
+                    "verified_events": verified}
+        for execution_id, status in snapshot.items():
+            if last_status.get(execution_id) != status:
+                return {"ok": False, "reason": "CURRENT_STATE_MISMATCH",
+                        "verified_events": verified, "execution_id": execution_id}
+        return {"ok": True, "reason": "EVENT_CHAIN_AND_STATE_CONSISTENT",
+                "verified_events": verified, "executions": len(snapshot),
+                "tip_hash": expected_prev}
