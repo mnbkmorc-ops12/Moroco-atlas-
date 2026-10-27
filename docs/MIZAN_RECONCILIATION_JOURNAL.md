@@ -12,7 +12,7 @@ The execution store treats `UNKNOWN` as terminal: uncertainty must not silently 
 - The observed result must be `SUCCEEDED` or `FAILED`; unresolved evidence cannot be recorded as a final observation.
 - The record requires an evidence reference, the SHA-256 digest of the evidence artifact, a named actor, and a timestamp.
 - A database transaction serializes concurrent writers. At most one reconciliation record can be committed per execution.
-- Each record is included in a separate global SHA-256 chain with a contiguous sequence number. The verifier checks sequence, hash links, row contents, source execution status, and unique execution coverage.
+- Each record is included in a separate global SHA-256 chain with a contiguous sequence number. A transactional head row anchors the latest sequence and hash so deletion of the tail is detected. The verifier checks sequence, hash links, row contents, source execution status, and the anchored head.
 - Recording reconciliation does not mutate the original execution, authorize a new intent, call a provider, dispatch work, or retry an external effect.
 
 ## Evidence boundary
@@ -30,6 +30,7 @@ A subsequent action, where policy allows one, must use a distinct intent/executi
 - rejection of a second reconciliation for the same execution;
 - concurrent writers with distinct executions (contiguous, valid hash chain);
 - concurrent attempts to reconcile one execution (one winner);
-- tamper detection for evidence digests.
+- tamper detection for evidence digests;
+- tail-truncation detection using the durable chain head.
 
 These are local SQLite software regression tests. They do not prove external evidence authenticity, production PostgreSQL atomicity, or exactly-once effects at a remote provider. The PostgreSQL concurrency harness remains a separate test and must target only the designated test project.
