@@ -1,0 +1,65 @@
+name: MIZAN Test DB Concurrency (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_test_database:
+        description: "Type YES only after confirming the isolated Supabase TEST project"
+        required: true
+        type: string
+      allow_test_writes:
+        description: "Type YES to authorize 100 test-only ledger writes"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mizan-test-db-concurrency
+  cancel-in-progress: false
+
+jobs:
+  concurrency-test:
+    if: ${{ inputs.confirm_test_database == 'YES' && inputs.allow_test_writes == 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: mizan-test
+    steps:
+      - name: Check out selected branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Validate required test secret
+        env:
+          DATABASE_URL: ${{ secrets.MIZAN_TEST_DATABASE_URL }}
+        run: |
+          test -n "$DATABASE_URL" || { echo "::error::Missing environment secret MIZAN_TEST_DATABASE_URL"; exit 1; }
+          node --input-type=module <<'NODE'
+          const u = new URL(process.env.DATABASE_URL);
+          const expectedHost = "db.wzjjengbwsfmunawcjnk.supabase.co";
+          if (u.hostname !== expectedHost) {
+            console.error("Refusing to run: DATABASE_URL is not the isolated test host.");
+            process.exit(1);
+          }
+          if (!["postgres", "postgres.wzjjengbwsfmunawcjnk"].includes(decodeURIComponent(u.username))) {
+            console.error("Refusing to run: unexpected database username.");
+            process.exit(1);
+          }
+          console.log("Target host and username validated; credentials are not printed.");
+          NODE
+
+      - name: Run guarded concurrency test
+        env:
+          DATABASE_URL: ${{ secrets.MIZAN_TEST_DATABASE_URL }}
+          MIZAN_TEST_CONFIRM: YES
+          MIZAN_TEST_PROJECT_REF: wzjjengbwsfmunawcjnk
+          MIZAN_ALLOW_TEST_WRITES: YES
+        run: npm run test:concurrency
