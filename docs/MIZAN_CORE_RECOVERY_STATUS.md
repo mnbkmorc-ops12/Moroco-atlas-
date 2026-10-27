@@ -37,6 +37,12 @@ Do not delete, settle, retry, or execute these records automatically. Inspect pr
 
 The latest recorded verifier reported `ok=true`, `STRUCTURE_AND_CHAIN_CONSISTENT`, 101 rows, sequence 1–101, head matching tip, no null hash fields, and zero previous-hash/hash mismatches. This result is time-specific and should be rerun read-only before reliance.
 
+## New local reference implementation (v0.5)
+
+A separate SQLite reference ledger has been added at `src/mizan_sqlite_ledger.py`. It uses `BEGIN IMMEDIATE`, a unique idempotency key, a transactional ledger-head update, canonical JSON hashing, and an independent chain verifier. Its tests cover 100 concurrent unique writes using 10 worker threads and repeated idempotency keys. These tests are committed but **have not yet been executed by GitHub Actions in this task**; treat their runtime result as UNKNOWN until CI reports.
+
+This local reference implementation does not replace the Supabase ledger and does not prove the Supabase SQL implementation has the same behavior.
+
 ## Next engineering gates
 
 1. Recover/export full Base44 source when workspace access is restored; compare both app IDs before choosing the canonical app.
