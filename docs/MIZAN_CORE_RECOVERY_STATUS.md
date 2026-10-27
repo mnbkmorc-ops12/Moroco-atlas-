@@ -6,6 +6,7 @@ Snapshot date: 2026-10-27 UTC
 
 | Item | Status | Evidence |
 |---|---|---|
+| Python MIZAN Core v0.1 | PASS — source recovered | Accessible library file `mizan_core_v0_1.py` |
 | Python MIZAN Core v0.4 | PASS — source recovered | Accessible library file `mizan_core_v04.py`, archived without claiming physical validation |
 | Python MIZAN Core v0.2 | PASS — source recovered | Accessible library file `mizan_core_v0_2.py` |
 | Base44 app inventory | PARTIAL | Two apps named MIZAN CORE found. One is ready and exposes schemas; the second is paused for user input. |
