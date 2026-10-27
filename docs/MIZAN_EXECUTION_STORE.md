@@ -23,6 +23,8 @@
 
 This model intentionally has no automatic retry path. Retry policy, if ever required, must be a separate governed decision with evidence; it must not be implemented by changing a terminal record back to an executable state.
 
+Every connection requests SQLite `synchronous=FULL` in addition to WAL, busy timeout, and foreign-key enforcement. This prioritizes commit durability over throughput, subject to the guarantees actually provided by the filesystem and storage device; it is not a substitute for backups or independent replicas.
+
 ## Test coverage
 
 `tests/test_mizan_execution_store.py` covers:
