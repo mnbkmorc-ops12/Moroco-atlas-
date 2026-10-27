@@ -46,7 +46,7 @@ class ReconciliationTests(unittest.TestCase):
     def test_cannot_reconcile_non_unknown_or_start_twice(self):
         pending = ExecutionOutcome("exec-5")
         running = start(pending)
-        with self.assertRaisesRegex(ReconciliationError, "only UNKNOWN"):
+        with self.assertRaisesRegex(ReconciliationError, "allowed only from UNKNOWN"):
             reconcile(running, observed_outcome=Outcome.FAILED, evidence_ref="ticket-8")
         with self.assertRaisesRegex(ReconciliationError, "only PENDING"):
             start(running)
