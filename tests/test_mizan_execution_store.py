@@ -106,6 +106,42 @@ class SQLiteExecutionStoreTests(unittest.TestCase):
             )
         self.assertEqual(self.store.get("exec-001").status, ExecutionStatus.PENDING)
 
+    def test_claim_transition_cannot_bypass_claim_once(self) -> None:
+        with self.assertRaisesRegex(GovernanceError, "claim_once"):
+            self.store.transition(
+                execution_id="exec-001", expected=ExecutionStatus.PENDING,
+                target=ExecutionStatus.CLAIMED, actor="worker-a",
+                now="2026-10-27T00:09:30Z",
+            )
+        self.assertEqual(self.store.get("exec-001").status, ExecutionStatus.PENDING)
+        self.assertTrue(self.store.verify_event_chain()["ok"])
+
+    def test_only_claim_owner_can_transition_claimed_or_running_execution(self) -> None:
+        self.assertTrue(self.store.claim_once(
+            execution_id="exec-001", worker_id="worker-a",
+            now="2026-10-27T00:09:40Z",
+        ).claimed)
+        with self.assertRaisesRegex(ExecutionStoreError, "worker ownership mismatch"):
+            self.store.transition(
+                execution_id="exec-001", expected=ExecutionStatus.CLAIMED,
+                target=ExecutionStatus.RUNNING, actor="worker-b",
+                now="2026-10-27T00:09:50Z",
+            )
+        self.assertEqual(self.store.get("exec-001").status, ExecutionStatus.CLAIMED)
+        self.store.transition(
+            execution_id="exec-001", expected=ExecutionStatus.CLAIMED,
+            target=ExecutionStatus.RUNNING, actor="worker-a",
+            now="2026-10-27T00:09:55Z",
+        )
+        with self.assertRaisesRegex(ExecutionStoreError, "worker ownership mismatch"):
+            self.store.transition(
+                execution_id="exec-001", expected=ExecutionStatus.RUNNING,
+                target=ExecutionStatus.SUCCEEDED, actor="worker-b",
+                now="2026-10-27T00:09:57Z",
+            )
+        self.assertEqual(self.store.get("exec-001").status, ExecutionStatus.RUNNING)
+        self.assertTrue(self.store.verify_event_chain()["ok"])
+
     def test_terminal_success_cannot_transition_again(self) -> None:
         self.store.claim_once(execution_id="exec-001", worker_id="worker-a",
                               now="2026-10-27T00:10:00Z")
