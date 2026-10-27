@@ -103,14 +103,33 @@ class SQLiteAuditLedger:
         try:
             con.execute("BEGIN IMMEDIATE")
             existing = con.execute(
-                "SELECT seq,event_id,idempotency_key,prev_hash,hash FROM ledger WHERE idempotency_key=?",
+                """SELECT seq,event_id,idempotency_key,event_type,payload_json,recorded_at,
+                          prev_hash,hash
+                   FROM ledger WHERE idempotency_key=?""",
                 (idempotency_key,),
             ).fetchone()
             if existing:
-                if existing["event_id"] != event_id:
-                    raise LedgerError("idempotency key already belongs to a different event_id")
+                # Idempotency means replaying the same intent, not silently accepting
+                # a changed payload under a previously used key.
+                same_intent = (
+                    existing["event_id"] == event_id
+                    and existing["event_type"] == event_type
+                    and existing["payload_json"] == payload_json
+                    and existing["recorded_at"] == recorded_at
+                )
+                if not same_intent:
+                    raise LedgerError(
+                        "idempotency key was reused with a different event intent"
+                    )
                 con.execute("COMMIT")
-                return AppendResult(**dict(existing), duplicate=True)
+                return AppendResult(
+                    seq=existing["seq"],
+                    event_id=existing["event_id"],
+                    idempotency_key=existing["idempotency_key"],
+                    prev_hash=existing["prev_hash"],
+                    hash=existing["hash"],
+                    duplicate=True,
+                )
 
             duplicate_id = con.execute(
                 "SELECT idempotency_key FROM ledger WHERE event_id=?", (event_id,)
