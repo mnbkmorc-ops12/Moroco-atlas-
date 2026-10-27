@@ -17,12 +17,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
       - name: Compile recovered sources
         run: python -m py_compile archive/recovered/mizan_core_v0_1.py archive/recovered/mizan_core_v0_2.py archive/recovered/mizan_core_v04.py src/mizan_sqlite_ledger.py src/mizan_governance.py src/mizan_execution_store.py src/mizan_reconciliation_journal.py
       - name: Check PostgreSQL concurrency harness syntax
         run: node --check scripts/concurrency-test.mjs
       - name: Run regression tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Test read-only API scaffold
+        run: deno test supabase/functions/mizan-api/handler_test.ts
 
   web-build:
     runs-on: ubuntu-latest
