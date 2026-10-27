@@ -83,6 +83,8 @@ class SQLiteExecutionStore:
         con.row_factory = sqlite3.Row
         con.execute("PRAGMA busy_timeout=20000")
         con.execute("PRAGMA foreign_keys=ON")
+        # Prefer commit durability for the governance/audit journal over throughput.
+        con.execute("PRAGMA synchronous=FULL")
         return con
 
     def _initialize(self) -> None:
