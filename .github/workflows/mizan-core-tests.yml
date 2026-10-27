@@ -23,3 +23,20 @@ jobs:
         run: node --check scripts/concurrency-test.mjs
       - name: Run regression tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+
+  web-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/web/package.json
+      - name: Install web dependencies
+        run: npm install
+      - name: Build web application
+        run: npm run build
