@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from contextlib import closing
 from dataclasses import dataclass
 from typing import Any
 
@@ -56,7 +57,7 @@ class SQLiteReconciliationJournal:
         if not isinstance(execution_store, SQLiteExecutionStore):
             raise TypeError("execution_store must be a SQLiteExecutionStore")
         self._store = execution_store
-        with self._store._connect() as con:
+        with closing(self._store._connect()) as con:
             con.execute("""
                 CREATE TABLE IF NOT EXISTS execution_reconciliations (
                     event_seq INTEGER PRIMARY KEY,
