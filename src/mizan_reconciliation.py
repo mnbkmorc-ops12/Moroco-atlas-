@@ -1,8 +1,9 @@
-"""MIZAN CORE external-effect reconciliation state machine.
+"""MIZAN CORE external-effect reconciliation policy model.
 
-An UNKNOWN outcome is not permission to retry. Reconciliation requires explicit
-independent evidence and records the evidence reference supplied by the caller.
-This module is a reference model, not a distributed transaction guarantee.
+UNKNOWN is terminal for the original execution and never permission to retry.
+Reconciliation returns a separate observation about the external system; it
+does not mutate/reopen the original execution and is not a durable journal.
+Persist observations through SQLiteReconciliationJournal.
 """
 from __future__ import annotations
 
@@ -20,7 +21,7 @@ class Outcome(str, Enum):
 
 
 class ReconciliationError(ValueError):
-    """Raised when a transition lacks authority or evidence."""
+    """Raised when an observation lacks the required evidence or state."""
 
 
 @dataclass(frozen=True)
@@ -31,7 +32,19 @@ class ExecutionOutcome:
     note: str | None = None
 
 
-_TERMINAL = {Outcome.SUCCEEDED, Outcome.FAILED, Outcome.CANCELLED}
+@dataclass(frozen=True)
+class ReconciliationObservation:
+    """Evidence-backed observation, distinct from the immutable execution state."""
+    execution_id: str
+    prior_status: Outcome
+    observed_outcome: Outcome
+    evidence_ref: str
+    note: str
+
+
+_TERMINAL = {
+    Outcome.SUCCEEDED, Outcome.FAILED, Outcome.UNKNOWN, Outcome.CANCELLED
+}
 
 
 def start(record: ExecutionOutcome) -> ExecutionOutcome:
@@ -43,7 +56,7 @@ def start(record: ExecutionOutcome) -> ExecutionOutcome:
 def mark_unknown(record: ExecutionOutcome, reason: str) -> ExecutionOutcome:
     if record.status not in {Outcome.RUNNING, Outcome.PENDING}:
         raise ReconciliationError("only PENDING/RUNNING executions may become UNKNOWN")
-    if not reason.strip():
+    if not isinstance(reason, str) or not reason.strip():
         raise ReconciliationError("UNKNOWN requires a non-empty reason")
     return ExecutionOutcome(record.execution_id, Outcome.UNKNOWN, note=reason.strip())
 
@@ -53,24 +66,25 @@ def reconcile(
     *,
     observed_outcome: Outcome,
     evidence_ref: str,
-) -> ExecutionOutcome:
-    """Resolve UNKNOWN only with explicit evidence; never dispatches/retries work."""
+) -> ReconciliationObservation:
+    """Record a model observation; the original execution stays terminal UNKNOWN."""
     if record.status is not Outcome.UNKNOWN:
         raise ReconciliationError("reconciliation is allowed only from UNKNOWN")
     if observed_outcome not in {Outcome.SUCCEEDED, Outcome.FAILED}:
         raise ReconciliationError("evidence must resolve to SUCCEEDED or FAILED")
-    if not evidence_ref or not evidence_ref.strip():
+    if not isinstance(evidence_ref, str) or not evidence_ref.strip():
         raise ReconciliationError("an evidence reference is required")
-    return ExecutionOutcome(
+    return ReconciliationObservation(
         execution_id=record.execution_id,
-        status=observed_outcome,
+        prior_status=record.status,
+        observed_outcome=observed_outcome,
         evidence_ref=evidence_ref.strip(),
-        note=f"reconciled from UNKNOWN; prior note: {record.note or 'none'}",
+        note=f"observation for terminal UNKNOWN execution; prior note: {record.note or 'none'}",
     )
 
 
 def may_dispatch(record: ExecutionOutcome) -> bool:
-    """Dispatch is permitted only for a new PENDING record; UNKNOWN is never retried."""
+    """Only a new PENDING record may be dispatched; UNKNOWN is never retried."""
     return record.status is Outcome.PENDING
 
 
