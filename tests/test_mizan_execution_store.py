@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import sqlite3
 import tempfile
 import unittest
 from concurrent.futures import ThreadPoolExecutor
@@ -124,6 +125,18 @@ class SQLiteExecutionStoreTests(unittest.TestCase):
         with self.assertRaises(ExecutionStoreError):
             self.store.claim_once(execution_id="missing", worker_id="worker-a",
                                   now="2026-10-27T00:14:00Z")
+
+
+    def test_verifier_detects_snapshot_changed_without_audit_event(self) -> None:
+        # Simulate an out-of-band database mutation that bypasses the journal API.
+        with sqlite3.connect(self.db_path) as con:
+            con.execute(
+                "UPDATE executions SET status=? WHERE execution_id=?",
+                (ExecutionStatus.SUCCEEDED.value, "exec-001"),
+            )
+        result = self.store.verify_event_chain()
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["reason"], "CURRENT_STATE_MISMATCH")
 
 
 if __name__ == "__main__":
