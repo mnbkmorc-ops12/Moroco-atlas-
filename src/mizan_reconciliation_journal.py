@@ -73,6 +73,17 @@ class SQLiteReconciliationJournal:
                     hash TEXT NOT NULL UNIQUE
                 )
             """)
+            con.execute("""
+                CREATE TABLE IF NOT EXISTS execution_reconciliation_head (
+                    id INTEGER PRIMARY KEY CHECK(id=1),
+                    event_seq INTEGER NOT NULL,
+                    hash TEXT NOT NULL
+                )
+            """)
+            con.execute("""
+                INSERT OR IGNORE INTO execution_reconciliation_head (id,event_seq,hash)
+                VALUES (1,0,?)
+            """, (_GENESIS,))
 
     @staticmethod
     def _validate_text(name: str, value: str) -> str:
@@ -162,6 +173,15 @@ class SQLiteReconciliationJournal:
                 event_seq, execution_id, observed_outcome, evidence_ref,
                 evidence_sha256, actor, now, prev_hash, event_hash,
             ))
+            head_update = con.execute("""
+                UPDATE execution_reconciliation_head
+                SET event_seq=?, hash=?
+                WHERE id=1 AND event_seq=? AND hash=?
+            """, (event_seq, event_hash, event_seq - 1, prev_hash))
+            if head_update.rowcount != 1:
+                raise ReconciliationJournalError(
+                    "reconciliation head changed or does not match the event chain"
+                )
             # Critical invariant: the execution snapshot remains UNKNOWN.
             unchanged = con.execute(
                 "SELECT status FROM executions WHERE execution_id=?",
@@ -203,6 +223,9 @@ class SQLiteReconciliationJournal:
             rows = con.execute(
                 "SELECT * FROM execution_reconciliations ORDER BY event_seq"
             ).fetchall()
+            head = con.execute(
+                "SELECT event_seq, hash FROM execution_reconciliation_head WHERE id=1"
+            ).fetchone()
             executions = {
                 row["execution_id"]: row["status"]
                 for row in con.execute("SELECT execution_id,status FROM executions")
@@ -238,6 +261,15 @@ class SQLiteReconciliationJournal:
                         "verified_events": expected_seq - 1}
             seen.add(row["execution_id"])
             prev_hash = actual_hash
+
+        if head is None:
+            return {"ok": False, "reason": "HEAD_MISSING", "verified_events": len(rows)}
+        if head["event_seq"] != len(rows):
+            return {"ok": False, "reason": "HEAD_SEQUENCE_MISMATCH",
+                    "verified_events": len(rows)}
+        if head["hash"] != prev_hash:
+            return {"ok": False, "reason": "HEAD_HASH_MISMATCH",
+                    "verified_events": len(rows)}
 
         return {
             "ok": True,
