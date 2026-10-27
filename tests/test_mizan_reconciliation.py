@@ -18,7 +18,7 @@ class ReconciliationTests(unittest.TestCase):
         unknown = mark_unknown(running, "network timeout after request")
         self.assertEqual(unknown.status, Outcome.UNKNOWN)
         self.assertFalse(may_dispatch(unknown))
-        self.assertFalse(terminal(unknown))
+        self.assertTrue(terminal(unknown))
 
     def test_unknown_can_be_resolved_only_with_evidence(self):
         unknown = mark_unknown(start(ExecutionOutcome("exec-2")), "response lost")
@@ -28,10 +28,12 @@ class ReconciliationTests(unittest.TestCase):
             evidence_ref="provider-receipt:abc123",
         )
         self.assertEqual(resolved.execution_id, "exec-2")
-        self.assertEqual(resolved.status, Outcome.SUCCEEDED)
+        self.assertEqual(resolved.prior_status, Outcome.UNKNOWN)
+        self.assertEqual(resolved.observed_outcome, Outcome.SUCCEEDED)
         self.assertEqual(resolved.evidence_ref, "provider-receipt:abc123")
-        self.assertTrue(terminal(resolved))
-        self.assertFalse(may_dispatch(resolved))
+        # Observation does not reopen or mutate the original UNKNOWN execution.
+        self.assertTrue(terminal(unknown))
+        self.assertFalse(may_dispatch(unknown))
 
     def test_reconciliation_rejects_missing_evidence(self):
         unknown = mark_unknown(start(ExecutionOutcome("exec-3")), "timeout")
