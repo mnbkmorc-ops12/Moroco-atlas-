@@ -8,7 +8,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-API_SOURCE = ROOT / "supabase" / "functions" / "mizan-api" / "index.ts"
+API_SOURCE = ROOT / "supabase" / "functions" / "mizan-api" / "handler.ts"
 CONTRACT = ROOT / "docs" / "API_CONTRACT.md"
 
 
