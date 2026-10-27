@@ -139,5 +139,12 @@ class SQLiteExecutionStoreTests(unittest.TestCase):
         self.assertEqual(result["reason"], "CURRENT_STATE_MISMATCH")
 
 
+    def test_plain_memory_database_is_rejected(self) -> None:
+        # This implementation opens a fresh connection per operation, so a plain
+        # :memory: database would silently lose its schema between calls.
+        with self.assertRaises(ValueError):
+            SQLiteExecutionStore(":memory:")
+
+
 if __name__ == "__main__":
     unittest.main()
