@@ -6,12 +6,14 @@ physics, PostgreSQL concurrency, deployment security, or production behavior.
 import importlib.util
 import tempfile
 import unittest
+import sys
 from pathlib import Path
 
 SOURCE = Path(__file__).parents[1] / "archive" / "recovered" / "mizan_core_v04.py"
 SPEC = importlib.util.spec_from_file_location("mizan_core_v04", SOURCE)
 mizan = importlib.util.module_from_spec(SPEC)
 assert SPEC and SPEC.loader
+sys.modules[SPEC.name] = mizan
 SPEC.loader.exec_module(mizan)
 
 
