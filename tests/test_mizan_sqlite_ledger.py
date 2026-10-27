@@ -20,6 +20,14 @@ class SQLiteLedgerTests(unittest.TestCase):
             event_id=f"evt-{i}", idempotency_key=f"key-{i}",
             event_type="TEST", payload={"i": i}, recorded_at=f"2026-10-27T00:00:{i:02d}Z")
 
+    def test_sqlite_connection_uses_full_synchronous_mode(self):
+        con = self.ledger._connect()
+        try:
+            # SQLite reports FULL as numeric value 2.
+            self.assertEqual(con.execute("PRAGMA synchronous").fetchone()[0], 2)
+        finally:
+            con.close()
+
     def test_empty_ledger_verifies(self):
         report = self.ledger.verify()
         self.assertTrue(report["ok"])
