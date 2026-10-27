@@ -6,6 +6,7 @@ This repository is being used to consolidate MIZAN CORE material recoverable fro
 
 ## Current layout
 
+- `archive/recovered/mizan_core_v0_1.py` — earliest recovered engineering registry and quarter-car simulation scaffold.
 - `archive/recovered/mizan_core_v04.py` — recovered Python evidence-aware registry and validation gate.
 - `archive/recovered/mizan_core_v0_2.py` — recovered engineering registry and quarter-car simulation scaffold.
 - `docs/MIZAN_CORE_RECOVERY_STATUS.md` — source provenance, limitations, and next steps.
