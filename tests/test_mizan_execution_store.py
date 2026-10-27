@@ -29,6 +29,14 @@ class SQLiteExecutionStoreTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.temp.cleanup()
 
+    def test_sqlite_connection_uses_full_synchronous_mode(self) -> None:
+        con = self.store._connect()
+        try:
+            # SQLite reports FULL as numeric value 2.
+            self.assertEqual(con.execute("PRAGMA synchronous").fetchone()[0], 2)
+        finally:
+            con.close()
+
     def test_only_one_concurrent_worker_can_claim(self) -> None:
         # Each call creates its own SQLite connection. BEGIN IMMEDIATE serializes claims.
         workers = [f"worker-{i:02d}" for i in range(24)]
