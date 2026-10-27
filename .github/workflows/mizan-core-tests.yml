@@ -15,6 +15,6 @@ jobs:
         with:
           python-version: "3.11"
       - name: Compile recovered sources
-        run: python -m py_compile archive/recovered/mizan_core_v04.py archive/recovered/mizan_core_v0_2.py
+        run: python -m py_compile archive/recovered/mizan_core_v0_1.py archive/recovered/mizan_core_v0_2.py archive/recovered/mizan_core_v04.py src/mizan_sqlite_ledger.py
       - name: Run regression tests
-        run: python -m unittest discover -s tests -v
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
