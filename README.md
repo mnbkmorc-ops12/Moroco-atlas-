@@ -8,9 +8,13 @@ This repository consolidates MIZAN CORE materials recoverable from connected pro
 
 - `src/mizan_governance.py` — pure decision and execution-state rules (`AUTHORIZED`, `DENIED`, `UNRESOLVED`; terminal `UNKNOWN`).
 - `src/mizan_execution_store.py` — durable SQLite execution journal, immutable execution identity, atomic `claim_once`, compare-and-set transitions, and tamper-evident event-chain validation.
+- `src/mizan_reconciliation.py` — pure reconciliation policy; `UNKNOWN` stays terminal while observed outcomes remain separate facts.
+- `src/mizan_reconciliation_journal.py` — durable evidence reference + SHA-256 journal for `UNKNOWN` executions; does not reopen or retry prior work.
 - `src/mizan_sqlite_ledger.py` — local v0.5 reference ledger with `BEGIN IMMEDIATE`, idempotency enforcement, hash-chain verification, and transactional head updates.
 - `tests/test_mizan_governance.py` — governance decision and state-transition regressions.
 - `tests/test_mizan_execution_store.py` — concurrent claim competition, immutable identity, terminal UNKNOWN, compare-and-set and audit-tampering tests.
+- `tests/test_mizan_reconciliation.py` — UNKNOWN terminal policy and evidence-gated observation model.
+- `tests/test_mizan_reconciliation_journal.py` — durable reconciliation, concurrent writers, unique resolution, and evidence-tamper tests.
 - `tests/test_mizan_sqlite_ledger.py` — isolated ledger tests including 100 concurrent appends across 10 workers.
 - `archive/recovered/mizan_core_v0_1.py` — earliest recovered engineering registry and quarter-car simulation scaffold.
 - `archive/recovered/mizan_core_v0_2.py` — recovered engineering registry and quarter-car simulation scaffold.
@@ -18,6 +22,8 @@ This repository consolidates MIZAN CORE materials recoverable from connected pro
 - `docs/MIZAN_CORE_RECOVERY_STATUS.md` — source provenance, limitations, and recovery steps.
 - `docs/MIZAN_CORE_STATE_MACHINE.md` — governance and execution state machine.
 - `docs/MIZAN_EXECUTION_STORE.md` — execution-store invariants and external-effect limitations.
+- `docs/MIZAN_CORE_RECONCILIATION_V1.md` — terminal UNKNOWN policy and external-effect boundaries.
+- `docs/MIZAN_RECONCILIATION_JOURNAL.md` — durable evidence journal contract and tests.
 - `scripts/concurrency-test.mjs` — guarded, test-project-only PostgreSQL concurrency harness.
 - `.github/workflows/mizan-core-tests.yml` — CI compile and regression workflow.
 
@@ -40,7 +46,7 @@ Python 3.10+:
 python -m unittest discover -s tests -v
 ```
 
-The CI workflow has a successful regression run for commit `c5a0f232d953542aeb09c87449d7344f6b5270a4`: [view GitHub Actions](https://github.com/mnbkmorc-ops12/Moroco-atlas-/actions/runs/40429985201). This verifies the committed software tests only; it does not certify PostgreSQL concurrency, deployed security, or vehicle engineering. Documentation updates after that code commit do not change the code tested by that run.
+Current-branch compilation and unit-test results are tracked in [GitHub Actions](https://github.com/mnbkmorc-ops12/Moroco-atlas-/actions?query=branch%3Amizan-core-recovery-2026-10-27). A green run verifies only the code at that commit and the tests that ran; it does not certify real PostgreSQL concurrency, deployed security, external-evidence authenticity, or vehicle engineering.
 
 ## Recovery limits
 
