@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sqlite3
+from contextlib import closing
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -69,8 +70,12 @@ class SQLiteExecutionStore:
 
     def __init__(self, path: str | Path):
         self.path = str(path)
-        if self.path != ":memory:":
-            Path(self.path).parent.mkdir(parents=True, exist_ok=True)
+        if self.path == ":memory:":
+            raise ValueError(
+                "SQLiteExecutionStore requires a file path; per-operation connections "
+                "cannot share a plain :memory: database"
+            )
+        Path(self.path).parent.mkdir(parents=True, exist_ok=True)
         self._initialize()
 
     def _connect(self) -> sqlite3.Connection:
@@ -81,9 +86,8 @@ class SQLiteExecutionStore:
         return con
 
     def _initialize(self) -> None:
-        with self._connect() as con:
-            if self.path != ":memory:":
-                con.execute("PRAGMA journal_mode=WAL")
+        with closing(self._connect()) as con:
+            con.execute("PRAGMA journal_mode=WAL")
             con.executescript("""
                 CREATE TABLE IF NOT EXISTS executions (
                     execution_id TEXT PRIMARY KEY,
@@ -210,7 +214,7 @@ class SQLiteExecutionStore:
             con.close()
 
     def get(self, execution_id: str) -> ExecutionRecord | None:
-        with self._connect() as con:
+        with closing(self._connect()) as con:
             row = con.execute(
                 "SELECT * FROM executions WHERE execution_id=?", (execution_id,)
             ).fetchone()
@@ -302,7 +306,7 @@ class SQLiteExecutionStore:
 
     def verify_event_chain(self) -> dict[str, Any]:
         """Verify hash links, legal per-execution transitions, and current snapshots."""
-        with self._connect() as con:
+        with closing(self._connect()) as con:
             rows = con.execute(
                 "SELECT * FROM execution_events ORDER BY event_seq"
             ).fetchall()
