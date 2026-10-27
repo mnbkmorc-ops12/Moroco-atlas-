@@ -40,6 +40,15 @@ class SQLiteLedgerTests(unittest.TestCase):
             self.ledger.append(event_id="evt-other", idempotency_key="key-1",
                                event_type="TEST", payload={}, recorded_at="2026-10-27T00:00:01Z")
 
+    def test_key_cannot_be_reused_with_changed_payload(self):
+        self.append_one(1)
+        with self.assertRaisesRegex(LedgerError, "different event intent"):
+            self.ledger.append(
+                event_id="evt-1", idempotency_key="key-1",
+                event_type="TEST", payload={"i": 999},
+                recorded_at="2026-10-27T00:00:01Z",
+            )
+
     def test_concurrent_unique_appends_have_contiguous_sequence(self):
         count = 100
         barrier = threading.Barrier(10)
