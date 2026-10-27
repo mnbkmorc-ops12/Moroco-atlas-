@@ -14,7 +14,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Compile recovered sources
-        run: python -m py_compile archive/recovered/mizan_core_v0_1.py archive/recovered/mizan_core_v0_2.py archive/recovered/mizan_core_v04.py src/mizan_sqlite_ledger.py src/mizan_governance.py
+        run: python -m py_compile archive/recovered/mizan_core_v0_1.py archive/recovered/mizan_core_v0_2.py archive/recovered/mizan_core_v04.py src/mizan_sqlite_ledger.py src/mizan_governance.py src/mizan_execution_store.py
+      - name: Check PostgreSQL concurrency harness syntax
+        run: node --check scripts/concurrency-test.mjs
       - name: Run regression tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
