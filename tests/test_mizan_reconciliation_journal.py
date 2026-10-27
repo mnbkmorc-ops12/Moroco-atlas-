@@ -159,6 +159,14 @@ class SQLiteReconciliationJournalTests(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertEqual(result["reason"], "EVENT_HASH_MISMATCH")
 
+    def test_verifier_detects_tail_truncation_using_durable_head(self) -> None:
+        self._record()
+        with sqlite3.connect(self.db_path) as con:
+            con.execute("DELETE FROM execution_reconciliations WHERE execution_id=?", ("exec-001",))
+        result = self.journal.verify_chain()
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["reason"], "HEAD_SEQUENCE_MISMATCH")
+
 
 if __name__ == "__main__":
     unittest.main()
