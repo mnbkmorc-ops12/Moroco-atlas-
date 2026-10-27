@@ -267,6 +267,10 @@ class SQLiteExecutionStore:
             raise ValueError("actor is required")
         if not isinstance(now, str) or not now.strip():
             raise ValueError("now is required")
+        if target is ExecutionStatus.CLAIMED:
+            raise GovernanceError(
+                "CLAIMED can only be acquired through claim_once"
+            )
         if target not in _ALLOWED[expected]:
             raise GovernanceError(
                 f"illegal execution transition: {expected.value} -> {target.value}"
@@ -283,6 +287,11 @@ class SQLiteExecutionStore:
                 raise ExecutionStoreError(
                     f"compare-and-set failed: expected {expected.value}, found {row['status']}"
                 )
+            if expected in {ExecutionStatus.CLAIMED, ExecutionStatus.RUNNING}:
+                if row["worker_id"] != actor:
+                    raise ExecutionStoreError(
+                        "worker ownership mismatch: only the claimed worker may transition this execution"
+                    )
             con.execute("""
                 UPDATE executions SET status=?,updated_at=?
                 WHERE execution_id=? AND status=?
