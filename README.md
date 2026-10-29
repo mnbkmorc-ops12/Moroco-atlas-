@@ -16,7 +16,7 @@ const destinations = [
   {
     name: "الدار البيضاء",
     type: "city",
-    tag: "عا��مة الاقتصاد",
+    tag: "عاصمة الاقتصاد",
     image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
     description: "مدينة عصرية ذات طابع عالمي، تجمع بين الواجهة البحرية والهندسة المعمارية المميزة.",
     highlights: ["مسجد الحسن الثاني", "الكورنيش", "العمارة الحديثة"],
@@ -49,7 +49,7 @@ const destinations = [
     description: "مدينة عتيقة مشهورة بمدينتها القديمة، أسواقها، وطرقها الملتوية العريقة.",
     highlights: ["فاس البالي", "الدباغة", "المدارس"],
     details: ["حرف يدوية", "تاريخ عميق", "أجواء أصلية"],
-    badge: "مغربية أصيلة",
+    badge: "مغر��ية أصيلة",
     summary: "فاس تروي قصة المغرب من خلال الأزقة القديمة، والصناعات الحرفية، والهوية الثقافية العميقة.",
     experiences: ["المدينة القديمة", "الدباغة", "الفن التقليدي"],
     budget: "متوسط",
@@ -243,6 +243,7 @@ function renderCityDetail(cityName) {
 }
 
 function applyMapSelection(cityName) {
+  if (!mapPoints.length) return;
   mapPoints.forEach((point) => {
     const active = point.dataset.city === cityName;
     point.classList.toggle("active", active);
@@ -337,9 +338,9 @@ function handleBookingSubmit(event) {
 }
 
 function renderCityPage() {
+  if (!cityPageContent) return;
   const params = new URLSearchParams(window.location.search);
   const cityName = params.get("city") || "مراكش";
-
   const city = destinations.find((item) => item.name === cityName) || destinations[0];
 
   cityPageContent.innerHTML = `

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الحجز | أطلس المغرب</title>
+    <meta name="description" content="نموذج حجز رحلات سياحية في المغرب." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="booking">
+    <header class="topbar">
+      <div class="container nav">
+        <a href="index.html" class="brand" aria-label="العودة إلى الصفحة الرئيسية">
+          <span class="logo">م</span>
+          <span>أطلس المغرب</span>
+        </a>
+
+        <nav aria-label="التنقل الرئيسي">
+          <a href="index.html#destinations">الوجهات</a>
+          <a href="index.html#planner">التخطيط</a>
+          <a href="booking.html">الحجز</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="booking-page-main">
+      <div class="container booking-grid booking-page-grid">
+        <div class="booking-form-wrap booking-form-card">
+          <div class="section-heading compact">
+            <p class="eyebrow">الحجز</p>
+            <h2>احجز تجربتك</h2>
+          </div>
+
+          <form id="bookingForm" class="booking-form">
+            <div class="field-row">
+              <label>
+                الاسم الكامل
+                <input type="text" id="bookingName" placeholder="اكتب اسمك" required />
+              </label>
+              <label>
+                البريد الإلكتروني
+                <input type="email" id="bookingEmail" placeholder="example@mail.com" required />
+              </label>
+            </div>
+
+            <div class="field-row">
+              <label>
+                المدينة
+                <select id="bookingCity"></select>
+              </label>
+              <label>
+                نوع التجربة
+                <select id="bookingExperience">
+                  <option value="رحلة مدن">رحلة مدن</option>
+                  <option value="رحلة صحراوية">رحلة صحراوية</option>
+                  <option value="رحلة بحرية">رحلة بحرية</option>
+                  <option value="رحلة جبلية">رحلة جبلية</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="field-row">
+              <label>
+                التاريخ
+                <input type="date" id="bookingDate" required />
+              </label>
+              <label>
+                عدد الأفراد
+                <input type="number" id="bookingGuests" min="1" max="20" value="2" required />
+              </label>
+            </div>
+
+            <label>
+              ملاحظات إضافية
+              <textarea id="bookingNotes" rows="4" placeholder="أضف ملاحظاتك..."></textarea>
+            </label>
+
+            <button type="submit" class="primary full-width">تأكيد الطلب</button>
+          </form>
+        </div>
+
+        <aside class="booking-summary booking-summary-card" id="bookingSummary">
+          <h3>ملخص الطلب</h3>
+          <p>اختر المدينة ثم املأ التفاصيل لتأكيد الحجز.</p>
+        </aside>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
