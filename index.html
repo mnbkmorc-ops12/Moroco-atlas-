@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Morocco Atlas</title>
+    <title>أطلس المغرب | اكتشف المغرب</title>
     <meta
       name="description"
-      content="Interactive atlas and destination guide for Morocco."
+      content="تطبيق عربي متكامل لاكتشاف المغرب، الوجهات السياحية، الخطة اليومية، والخريطة التفاعلية."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap&family=Tajawal:wght@400;500;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -19,42 +19,45 @@
   <body>
     <header class="topbar">
       <div class="container nav">
-        <div class="brand">
-          <span class="logo">M</span>
-          <span>Morocco Atlas</span>
-        </div>
-        <nav>
-          <a href="#discover">Discover</a>
-          <a href="#regions">Regions</a>
-          <a href="#culture">Culture</a>
-          <a href="#journey">Journey</a>
+        <a href="#home" class="brand" aria-label="العودة إلى الأعلى">
+          <span class="logo">م</span>
+          <span>أطلس المغرب</span>
+        </a>
+
+        <nav aria-label="التنقل الرئيسي">
+          <a href="#discover">اكتشف</a>
+          <a href="#destinations">الوجهات</a>
+          <a href="#map-section">الخريطة</a>
+          <a href="#planner">التخطيط</a>
+          <a href="#faq">الأسئلة</a>
         </nav>
       </div>
     </header>
 
-    <main>
+    <main id="home">
       <section class="hero">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">North Africa • Kingdom of Morocco</p>
-            <h1>Explore a land of colors, history, and desert magic.</h1>
+            <p class="eyebrow">المغرب • رحلة ساحرة</p>
+            <h1>اكتشف ألوان التاريخ، الساحل، والصحراء في قلب المغرب.</h1>
             <p class="lead">
-              From the Atlantic coast to the Sahara, Morocco blends ancient heritage,
-              vibrant souks, golden dunes, and modern innovation in one unforgettable
-              journey.
+              من مراكش إلى طنجة، ومن الدار البيضاء إلى الصحراء الكبرى، أضف رحلتك إلى
+              تجربة مغربية مليئة بالهوية، الثقافة، والطبيعة الساحرة.
             </p>
+
             <div class="actions">
-              <a href="#regions" class="primary">Explore regions</a>
-              <a href="#culture" class="secondary">Culture guide</a>
+              <a href="#destinations" class="primary">استكشف الوجهات</a>
+              <a href="#planner" class="secondary">خطّط رحلتك</a>
             </div>
-            <ul class="stats">
-              <li><strong>12</strong><span>Regions</span></li>
-              <li><strong>4</strong><span>Major coasts</span></li>
-              <li><strong>3</strong><span>Great deserts</span></li>
+
+            <ul class="stats" aria-label="إحصائيات المغرب">
+              <li><strong>12</strong><span>جهة</span></li>
+              <li><strong>46</strong><span>مدينة رئيسية</span></li>
+              <li><strong>4</strong><span>مواسم سفر</span></li>
             </ul>
           </div>
 
-          <div class="hero-card" aria-label="Morocco destination card">
+          <div class="hero-card" aria-label="مدينة مختارة في المغرب">
             <div class="card-glow"></div>
             <div class="mini-map">
               <span class="pin pin-1"></span>
@@ -63,9 +66,9 @@
               <span class="pin pin-4"></span>
             </div>
             <div class="destination-info">
-              <p>Featured city</p>
-              <h2>Marrakech</h2>
-              <small>Red City • Medina • Gardens</small>
+              <p>تجربة مميزة</p>
+              <h2>مراكش</h2>
+              <small>المدن الحمراء • الأسواق • الحدائق</small>
             </div>
           </div>
         </div>
@@ -74,89 +77,163 @@
       <section id="discover" class="highlights">
         <div class="container">
           <div class="section-heading">
-            <p class="eyebrow">Why Morocco</p>
-            <h2>At the crossroads of continents</h2>
+            <p class="eyebrow">لماذا المغرب؟</p>
+            <h2>كل زاوية تحكي قصة جديدة</h2>
           </div>
 
           <div class="highlight-grid">
             <article class="feature">
               <span class="icon">🕌</span>
-              <h3>Historic cities</h3>
-              <p>Walk through centuries of art, palaces, mosques, and medinas.</p>
+              <h3>تراث إمبراطوري</h3>
+              <p>مدن تاريخية، قصور، وأسواق غنية بالحرف التقليدية والهوية المغربية.</p>
             </article>
             <article class="feature">
               <span class="icon">🏜️</span>
-              <h3>Desert adventure</h3>
-              <p>Experience camel rides, starlit nights, and vast Saharan landscapes.</p>
+              <h3>رحلات صحراوية</h3>
+              <p>أيام في الصحراء، ليالٍ تحت النجوم، وركوب الجمال عبر الكثبان الذهبية.</p>
             </article>
             <article class="feature">
               <span class="icon">🌊</span>
-              <h3>Atlantic coast</h3>
-              <p>Enjoy beaches, surf, and cliffside towns along the western edge.</p>
+              <h3>الساحل الأطلسي</h3>
+              <p>ممرات بحرية، شواطئ هادئة، ومناطق عيش ساحرة على طول الساحل.</p>
             </article>
             <article class="feature">
               <span class="icon">🧺</span>
-              <h3>Market culture</h3>
-              <p>Explore spice stalls, textiles, ceramics, and authentic local flavors.</p>
+              <h3>الثقافة المحلية</h3>
+              <p>مقاهي، أطعمة مغربية أصيلة، وحرف يدوية تعكس روح المنطقة.</p>
             </article>
           </div>
         </div>
       </section>
 
-      <section id="regions" class="regions">
+      <section id="destinations" class="destinations">
         <div class="container">
           <div class="section-heading split">
             <div>
-              <p class="eyebrow">Regional explorer</p>
-              <h2>Choose a destination</h2>
+              <p class="eyebrow">اكتشف</p>
+              <h2>أفضل الوجهات</h2>
+            </div>
+            <div class="filter-bar" aria-label="فلترة الوجهات">
+              <button class="filter active" data-filter="all">الكل</button>
+              <button class="filter" data-filter="city">مدن</button>
+              <button class="filter" data-filter="coast">سواحل</button>
+              <button class="filter" data-filter="desert">صحاري</button>
+              <button class="filter" data-filter="mountain">جبال</button>
             </div>
           </div>
 
-          <div class="region-layout">
-            <div class="region-list" id="regionList" aria-label="Regions list"></div>
-            <aside class="region-detail" id="regionDetail" aria-live="polite"></aside>
-          </div>
+          <div class="destination-grid" id="destinationGrid"></div>
         </div>
       </section>
 
-      <section id="culture" class="culture">
+      <section id="map-section" class="map-section">
         <div class="container">
           <div class="section-heading">
-            <p class="eyebrow">Cultural richness</p>
-            <h2>Tradition meets modern life</h2>
+            <p class="eyebrow">الخريطة</p>
+            <h2>تصفح المغرب تفاعليًا</h2>
           </div>
 
-          <div class="culture-grid">
-            <div class="culture-card">
-              <h3>Language</h3>
-              <p>Arabic and Amazigh are core to the nation’s identity, with French widely used in urban life and diplomacy.</p>
+          <div class="map-layout">
+            <div class="map-panel">
+              <svg class="morocco-map" viewBox="0 0 500 600" role="img" aria-label="خريطة مغربية">
+                <path d="M178 80 L220 50 L270 66 L310 92 L360 116 L402 168 L432 220 L412 274 L388 314 L360 360 L342 414 L326 466 L294 514 L260 540 L218 566 L172 546 L138 500 L116 450 L98 392 L88 322 L104 286 L120 234 L134 172 L156 128 Z" class="map-shape" />
+                <circle class="map-point active" data-city="مراكش" cx="260" cy="280" r="9"></circle>
+                <circle class="map-point" data-city="الدار البيضاء" cx="185" cy="330" r="8"></circle>
+                <circle class="map-point" data-city="الرباط" cx="220" cy="290" r="8"></circle>
+                <circle class="map-point" data-city="فاس" cx="322" cy="260" r="8"></circle>
+                <circle class="map-point" data-city="طنجة" cx="118" cy="240" r="8"></circle>
+                <circle class="map-point" data-city="مراكش" cx="260" cy="280" r="9"></circle>
+                <circle class="map-point" data-city="شفشاون" cx="178" cy="185" r="8"></circle>
+                <circle class="map-point" data-city="الصحراء" cx="318" cy="420" r="8"></circle>
+                <circle class="map-point" data-city="أكادير" cx="212" cy="400" r="8"></circle>
+              </svg>
             </div>
-            <div class="culture-card">
-              <h3>Cuisine</h3>
-              <p>Couscous, tagine, harira, mint tea, and fresh market produce define daily life and hospitality.</p>
-            </div>
-            <div class="culture-card">
-              <h3>Crafts</h3>
-              <p>From leatherwork and ceramics to rugs and lanterns, Morocco is renowned for authentic craftsmanship.</p>
-            </div>
+
+            <aside class="city-detail" id="cityDetail" aria-live="polite"></aside>
           </div>
         </div>
       </section>
 
-      <section id="journey" class="journey">
-        <div class="container journey-box">
-          <div>
-            <p class="eyebrow">Plan your route</p>
-            <h2>Build a memorable Moroccan story.</h2>
+      <section id="planner" class="planner">
+        <div class="container planner-grid">
+          <div class="planner-panel">
+            <div class="section-heading compact">
+              <p class="eyebrow">التخطيط</p>
+              <h2>خطّط رحلتك</h2>
+            </div>
+
+            <form id="itineraryForm" class="itinerary-form">
+              <label>
+                اختر المدينة
+                <select id="citySelect"></select>
+              </label>
+
+              <label>
+                مدة الرحلة
+                <select id="tripDuration">
+                  <option value="2">يومين</option>
+                  <option value="4">4 أيام</option>
+                  <option value="7" selected>7 أيام</option>
+                  <option value="10">10 أيام</option>
+                </select>
+              </label>
+
+              <button type="submit" class="primary full-width">إنشاء الخطة</button>
+            </form>
           </div>
-          <a href="#top" class="primary">Start exploring</a>
+
+          <div class="itinerary-panel">
+            <h3>رحلتك المقترحة</h3>
+            <div id="itineraryOutput" class="itinerary-output"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="gallery">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">لحظات</p>
+            <h2>تجارب تبقى في الذاكرة</h2>
+          </div>
+
+          <div class="gallery-grid">
+            <div class="gallery-item tall">المدينة القديمة</div>
+            <div class="gallery-item">جبال الأطلس</div>
+            <div class="gallery-item">معسكر الصحراء</div>
+            <div class="gallery-item wide">غروب ساحلي</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="faq">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">أسئلة شائعة</p>
+            <h2>قبل أن تذهب</h2>
+          </div>
+
+          <div class="faq-list">
+            <details open>
+              <summary>ما أفضل وقت للزيارة؟</summary>
+              <p>أفضل وقت هو الربيع (من مارس إلى مايو) والخريف (من سبتمبر إلى نوفمبر) بسبب المناخ المعتدل.</p>
+            </details>
+            <details>
+              <summary>هل أحتاج فيزا؟</summary>
+              <p>يعتمد ذلك على جنسيتك، لكن العديد من الزوار يمكنهم الدخول دون فيزا أو بفيزا عند الوصول لفترات قصيرة.</p>
+            </details>
+            <details>
+              <summary>هل المغرب آمن للسياح؟</summary>
+              <p>نعم، المغرب عادةً آمن، مع ضرورة الالتزام بالاحتياطات المعتادة والحذر في الأماكن المزدحمة.</p>
+            </details>
+          </div>
         </div>
       </section>
     </main>
 
     <footer class="footer">
-      <div class="container">
-        <p>© <span id="year"></span> Morocco Atlas</p>
+      <div class="container footer-row">
+        <p>© <span id="year"></span> أطلس المغرب</p>
+        <a href="#home">عودة إلى الأعلى</a>
       </div>
     </footer>
 
