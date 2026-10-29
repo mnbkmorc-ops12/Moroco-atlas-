@@ -1,407 +1,439 @@
-const destinations = [
-  {
-    name: "مراكش",
-    type: "city",
-    tag: "مدينة حمراء",
-    image: "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1200&q=80",
-    description: "مدينة نابضة بالحياة تجمع بين القصور والحمامات والحدائق والأسواق العريقة.",
-    highlights: ["سوق الدباغة", "جامع الفنا", "الحدائق"],
-    details: ["مقاهي أنيقة", "تجارب ثقافية", "أجواء موسيقية"],
-    badge: "مشهد تاريخي",
-    summary: "مراكش هي قلب المغرب العاطفي، حيث تتداخل القهوة الساخنة، الأسواق الملونة، والقصور الجذابة في تجربة ثقافية لا تُنسى.",
-    experiences: ["جولة في السوق", "جلسة شاي", "رحلة في الأطلس"],
-    budget: "متوسط إلى مرتفع",
-    bestFor: "العائلات والمؤرخين"
-  },
-  {
-    name: "الدار البيضاء",
-    type: "city",
-    tag: "عاصمة الاقتصاد",
-    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
-    description: "مدينة عصرية ذات طابع عالمي، تجمع بين الواجهة البحرية والهندسة المعمارية المميزة.",
-    highlights: ["مسجد الحسن الثاني", "الكورنيش", "العمارة الحديثة"],
-    details: ["أنشطة بحرية", "مراكز تسوق", "مطاعم فاخرة"],
-    badge: "عصرية",
-    summary: "الدار البيضاء تمزج بين الحداثة والهوية البحرية، وتقدم تجربة حضرية فاخرة ومريحة للزوار.",
-    experiences: ["كورنيش البحر", "متحف", "تجربة طعام"],
-    budget: "مرتفع",
-    bestFor: "رحلات الأعمال والسياحة العصرية"
-  },
-  {
-    name: "طنجة",
-    type: "city",
-    tag: "بوابة الشمال",
-    image: "https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=1200&q=80",
-    description: "مدينة ساحلية مليئة بالهواء المتوسط والثقافة المتعددة والواجهة البحرية الساحرة.",
-    highlights: ["مغارة هرقل", "القصبة", "واجهة المضيق"],
-    details: ["مزيج ثقافات", "مناظر بحرية", "أسواق فنية"],
-    badge: "شمالية",
-    summary: "طنجة هي نقطة الالتقاء بين الثقافات، والمدينة التي تشهد تآلفاً بين البحر والهوية المحيطية.",
-    experiences: ["جولة بالمدينة", "مراقبة البحر", "سوق فني"],
-    budget: "متوسط",
-    bestFor: "السياحة الثقافية"
-  },
-  {
-    name: "فاس",
-    type: "city",
-    tag: "مدينة العقول",
-    image: "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
-    description: "مدينة عتيقة مشهورة بمدينتها القديمة، أسواقها، وطرقها الملتوية العريقة.",
-    highlights: ["فاس البالي", "الدباغة", "المدارس"],
-    details: ["حرف يدوية", "تاريخ عميق", "أجواء أصلية"],
-    badge: "مغربية أصيلة",
-    summary: "فاس تروي قصة المغرب من خلال الأزقة القديمة، والصناعات الحرفية، والهوية الثقافية العميقة.",
-    experiences: ["المدينة القديمة", "الدباغة", "الفن التقليدي"],
-    budget: "متوسط",
-    bestFor: "المتأملين والمحبين للتاريخ"
-  },
-  {
-    name: "أكادير",
-    type: "coast",
-    tag: "ساحل الأطلسي",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-    description: "مدينة استرخاء مع شواطئ طويلة، أجواء دافئة، وسبل راحة ممتازة خلال السنة.",
-    highlights: ["الشواطئ", "المنطقة البحرية", "المقاهي"],
-    details: ["رحلات بحرية", "أجواء عائلية", "شاطئ هادئ"],
-    badge: "ساحل",
-    summary: "أكادير رائعة لمن يبحث عن استرخاء على الشواطئ وهدوء الجزر الواعدة في جنوب المغرب.",
-    experiences: ["شاطئ", "مطعم بحري", "جلسة بحرية"],
-    budget: "متوسط",
-    bestFor: "العائلات والسياحة البحرية"
-  },
-  {
-    name: "الصحراء",
-    type: "desert",
-    tag: "سهرات الكثبان",
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-    description: "رحلة إلى قلب الصحراء، مع كهوف رملية، ليالٍ تحت النجوم، ومغامرات عظيمة.",
-    highlights: ["الكثبان", "الرحلات الليلية", "المخيمات"],
-    details: ["نجوم", "أجواء هادئة", "تجربة فريدة"],
-    badge: "صحراء",
-    summary: "الصحراء المغربية تُعرّف الزائر بحجم الفضاء، وهدوء الليل، وروح البداوة الأصيلة.",
-    experiences: ["ركوب الجمل", "المخيم", "غروب الصحراء"],
-    budget: "متوسط إلى مرتفع",
-    bestFor: "المغامرين والمصورين"
-  },
-  {
-    name: "شفشاون",
-    type: "mountain",
-    tag: "جبال الريف",
-    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80",
-    description: "مدينة زرقاء هادئة محاطة بالجبال، مع أجواء روحية وملامح طبيعية ساحرة.",
-    highlights: ["المدينة الزرقاء", "الجبال", "الحرف"],
-    details: ["أجواء هادئة", "مناظر طبيعية", "منطقة تصويرية"],
-    badge: "جبال",
-    summary: "شفشاون تحمل ألوان الطبيعة والهدوء، وتقدم تجربة مميزة في قلب الجبال الشمالية.",
-    experiences: ["الممرات الجبلية", "مدينة زرقاء", "جلسة فنجان"],
-    budget: "متوسط",
-    bestFor: "المصورين والباحثين عن الهدوء"
-  },
-  {
-    name: "الرباط",
-    type: "city",
-    tag: "العاصمة",
-    image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80",
-    description: "مدينة عاصمة متوازنة تجمع بين التاريخ والمنطقة الساحلية والحياة الثقافية.",
-    highlights: ["قصبة الأوداية", "الميناء", "المتاحف"],
-    details: ["ثقافة", "واجهة بحرية", "أجواء عصرية"],
-    badge: "عاصمة",
-    summary: "الرباط تقدم توازنًا رائعًا بين الهدوء، التاريخ، والواجهة البحرية المريحة.",
-    experiences: ["قصبة", "منتزهات", "متحف"],
-    budget: "متوسط",
-    bestFor: "رحلات مركزية ومشاهدة المدن"
-  }
-];
-
-const experiences = [
-  {
-    title: "رحلة المراكب في الأطلس",
-    tag: "مغامرة",
-    description: "استمتع برحلة جبلية متكاملة مع جولات في القرى والحدائق والأماكن الخفية.",
-    icon: "⛰️"
-  },
-  {
-    title: "تجربة الجمال في الصحراء",
-    tag: "صحاري",
-    description: "رمل، شروق، وجلسة غروب تحت النجوم مع معسكر فاخر في قلب الصحراء.",
-    icon: "🏜️"
-  },
-  {
-    title: "لقاء مع الأسواق المغربية",
-    tag: "ثقافة",
-    description: "اكتشف البهارات، الحرف، والهوية المحلية في أحياء السوق العتيقة.",
-    icon: "🧺"
-  },
-  {
-    title: "رحلة ساحلية ناعمة",
-    tag: "بحر",
-    description: "يوم هادئ على الشاطئ مع وجبات بحرية ومناظر شروق ممتعة.",
-    icon: "🌊"
-  }
-];
-
-const cityMap = {
-  "مراكش": "ابدأ بتجولك في الساحة ومتابعة أنشطة السوق ثم استمتع بالغروب في الحدائق.",
-  "الدار البيضاء": "توجه إلى كورنيش البحر ومشاهدة مسجد الحسن الثاني في المساء.",
-  "طنجة": "استمتع بمشهد المضيق وسوق المدينة القديمة مع نزهة ساحلية.",
-  "فاس": "خصص يومًا كاملًا للمدينة القديمة والعناية بالحرف اليدوية التقليدية.",
-  "أكادير": "استمتع بالشواطئ، ثم جولة في المدينة ومقاهيها الساحلية.",
-  "الصحراء": "خطط لرحلة رملية عند الغروب وتخييم تحت السماء المرصعة بالنجوم.",
-  "شفشاون": "قضاء يوم هادئ في الأزقة الزرقاء والاستمتاع بإطلالات الجبال.",
-  "الرباط": "استخدم يومًا للاستمتاع بالواجهة البحرية والتاريخ في القصبة.",
-};
-
-const destinationGrid = document.getElementById("destinationGrid");
-const cityDetail = document.getElementById("cityDetail");
-const cityDetailPanel = document.getElementById("cityDetailPanel");
-const filters = document.querySelectorAll(".filter");
-const citySearch = document.getElementById("citySearch");
-const itineraryForm = document.getElementById("itineraryForm");
-const citySelect = document.getElementById("citySelect");
-const tripDuration = document.getElementById("tripDuration");
-const itineraryOutput = document.getElementById("itineraryOutput");
-const yearNode = document.getElementById("year");
-const mapPoints = document.querySelectorAll(".map-point");
-const experienceGrid = document.getElementById("experienceGrid");
-const bookingCity = document.getElementById("bookingCity");
-const bookingForm = document.getElementById("bookingForm");
-const bookingSummary = document.getElementById("bookingSummary");
-
-let currentFilter = "all";
-let currentSearch = "";
-
-function renderExperienceCards() {
-  experienceGrid.innerHTML = experiences
-    .map(
-      (experience) => `
-        <article class="experience-card">
-          <span class="tag">${experience.tag}</span>
-          <h3>${experience.icon} ${experience.title}</h3>
-          <p>${experience.description}</p>
-        </article>
-      `
-    )
-    .join("");
+:root {
+  --bg: #0d1728;
+  --bg-alt: #101d33;
+  --panel: rgba(16, 27, 42, 0.82);
+  --line: rgba(255,255,255,0.12);
+  --text: #edf6ff;
+  --muted: #bfcae0;
+  --primary: #f59e0b;
+  --primary-dark: #d97706;
+  --secondary: #24c38e;
+  --cyan: #8ad7ff;
+  --shadow: rgba(15, 23, 42, 0.55);
 }
 
-function renderDestinationCards(filter = currentFilter, query = currentSearch) {
-  const visible = destinations.filter((item) => {
-    const matchesFilter = filter === "all" || item.type === filter;
-    const matchesQuery = !query || item.name.toLowerCase().includes(query.toLowerCase()) || item.description.toLowerCase().includes(query.toLowerCase());
-    return matchesFilter && matchesQuery;
-  });
-
-  destinationGrid.innerHTML = visible
-    .map(
-      (destination) => `
-        <article class="destination-card">
-          <div class="destination-image" style="background-image: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.45)), url('${destination.image}');">
-            <span>${destination.tag}</span>
-          </div>
-          <div class="destination-card-content">
-            <h3>${destination.name}</h3>
-            <p>${destination.description}</p>
-            <div class="destination-meta">
-              ${destination.highlights.map((item) => `<span>${item}</span>`).join("")}
-            </div>
-            <div style="margin-top:16px;">
-              <button class="detail-button" data-city="${destination.name}">عرض التفاصيل</button>
-            </div>
-          </div>
-        </article>
-      `
-    )
-    .join("");
-
-  document.querySelectorAll(".detail-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      const selectedCity = button.dataset.city;
-      citySelect.value = selectedCity;
-      bookingCity.value = selectedCity;
-      applyMapSelection(selectedCity);
-      renderCityDetailPanel(selectedCity);
-      document.getElementById("city-detail-view").scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  });
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: "Cairo", sans-serif;
+  background: radial-gradient(circle at top, rgba(245,158,11,0.14), transparent 22%), linear-gradient(180deg, #0b1320 0%, #0d1728 100%);
+  color: var(--text);
 }
 
-function renderCityDetailPanel(cityName) {
-  const city = destinations.find((item) => item.name === cityName) || destinations[0];
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button, input, select, textarea { font: inherit; }
+.container { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
 
-  cityDetailPanel.innerHTML = `
-    <div class="detail-hero" style="background-image: url('${city.image}');">
-      <div class="detail-hero-content">
-        <span class="badge">${city.badge}</span>
-        <h3>${city.name}</h3>
-        <p>${city.summary}</p>
-      </div>
-    </div>
-    <div class="detail-body">
-      <div class="detail-facts">
-        <h4>معلومات أساسية</h4>
-        <ul>
-          <li>الميزانية: ${city.budget}</li>
-          <li>الأفضل لـ: ${city.bestFor}</li>
-          <li>الأنشطة: ${city.experiences.join(" • ")}</li>
-        </ul>
-      </div>
-      <div class="detail-experiences">
-        <h4>أفضل التجارب</h4>
-        <ul>
-          ${city.highlights.map((item) => `<li>${item}</li>`).join("")}
-        </ul>
-      </div>
-    </div>
-  `;
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(16px);
+  background: rgba(11, 19, 32, 0.72);
+  border-bottom: 1px solid var(--line);
 }
 
-function renderCityDetail(cityName) {
-  const city = destinations.find((item) => item.name === cityName) || destinations[0];
-
-  cityDetail.innerHTML = `
-    <span class="badge">${city.badge}</span>
-    <h3>${city.name}</h3>
-    <p>${city.description}</p>
-    <ul>
-      ${city.details.map((item) => `<li>${item}</li>`).join("")}
-    </ul>
-  `;
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
 }
 
-function applyMapSelection(cityName) {
-  mapPoints.forEach((point) => {
-    const active = point.dataset.city === cityName;
-    point.classList.toggle("active", active);
-  });
-  renderCityDetail(cityName);
-  renderCityDetailPanel(cityName);
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
 }
 
-function populateCitySelect() {
-  citySelect.innerHTML = destinations
-    .map((city) => `<option value="${city.name}">${city.name}</option>`)
-    .join("");
-
-  bookingCity.innerHTML = destinations
-    .map((city) => `<option value="${city.name}">${city.name}</option>`)
-    .join("");
-
-  const defaultCity = "مراكش";
-  citySelect.value = defaultCity;
-  bookingCity.value = defaultCity;
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #0d1728;
+  font-weight: 800;
 }
 
-function generateItinerary(event) {
-  event.preventDefault();
-
-  const city = citySelect.value;
-  const days = Number(tripDuration.value);
-
-  const route = [
-    `اليوم 1: الوصول إلى ${city} واستقرار الإقامة في قلب المدينة.`,
-    `اليوم 2: استكشاف أحياء المدينة والأسواق والتجارب المحلية.`,
-    `اليوم 3: زيارة المعالم الأكثر شهرة واستراحة في مكان شهي.`,
-    `اليوم 4: جولة طبيعية أو نقطة مشاهدة بديعة في المنطقة.`,
-    `اليوم 5: ت��ربة ثقافية أو سوقية مميزة في محيط المدينة.`,
-    `اليوم 6: استرخاء في المقاهي أو الساحل أو أماكن طبيعية.`,
-    `اليوم 7: يوم تسوق ومشاهدة أخيرة قبل مغادرة الرحلة.`,
-  ];
-
-  const selectedDays = Math.min(days, route.length);
-  const steps = route.slice(0, selectedDays).map((step, index) => `
-    <div class="route-step">
-      <strong>الخطوة ${index + 1}</strong>
-      <p>${step}</p>
-    </div>
-  `).join("");
-
-  itineraryOutput.innerHTML = `
-    <div class="route-step">
-      <strong>المدينة الأساسية</strong>
-      <p>${city}</p>
-    </div>
-    <div class="route-step">
-      <strong>معلومة ذكية</strong>
-      <p>${cityMap[city] || "استمتع بالأجواء المحلية وكن مرنًا في خطتك."}</p>
-    </div>
-    ${steps}
-  `;
+nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: var(--muted);
+  flex-wrap: wrap;
 }
 
-function updateBookingSummary() {
-  const city = bookingCity.value;
-  const experience = document.getElementById("bookingExperience").value;
-  const guests = document.getElementById("bookingGuests").value;
-  const date = document.getElementById("bookingDate").value || "لم يتم تحديد التاريخ";
-
-  bookingSummary.innerHTML = `
-    <h3>ملخص الطلب</h3>
-    <p>تجربتك المفضلة في ${city}</p>
-    <div class="summary-box">
-      <strong>نوع التجربة:</strong> ${experience}<br />
-      <strong>التاريخ:</strong> ${date}<br />
-      <strong>عدد الأفراد:</strong> ${guests}
-    </div>
-  `;
+.hero, .highlights, .destinations, .map-section, .planner, .experience-section, .booking-section, .gallery, .faq {
+  padding: 54px 0;
 }
 
-function handleBookingSubmit(event) {
-  event.preventDefault();
-
-  const city = bookingCity.value;
-  const experience = document.getElementById("bookingExperience").value;
-  const name = document.getElementById("bookingName").value;
-  const date = document.getElementById("bookingDate").value;
-  const guests = document.getElementById("bookingGuests").value;
-
-  bookingSummary.innerHTML = `
-    <h3>تم تأكيد الطلب</h3>
-    <div class="summary-box">
-      <strong>اسم العميل:</strong> ${name}<br />
-      <strong>المدينة:</strong> ${city}<br />
-      <strong>التجربة:</strong> ${experience}<br />
-      <strong>التاريخ:</strong> ${date}<br />
-      <strong>الأفراد:</strong> ${guests}
-    </div>
-  `;
+.hero-copy h1, .section-heading h2, .booking-form-wrap h2, .planner-panel h2, .itinerary-panel h3 {
+  margin: 0;
+  line-height: 1.08;
+  letter-spacing: -0.05em;
 }
 
-filters.forEach((button) => {
-  button.addEventListener("click", () => {
-    filters.forEach((item) => item.classList.toggle("active", item === button));
-    currentFilter = button.dataset.filter;
-    renderDestinationCards(currentFilter, currentSearch);
-  });
-});
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 32px;
+  align-items: center;
+}
 
-citySearch.addEventListener("input", (event) => {
-  currentSearch = event.target.value.trim();
-  renderDestinationCards(currentFilter, currentSearch);
-});
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--cyan);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
 
-mapPoints.forEach((point) => {
-  point.addEventListener("click", () => {
-    const selectedCity = point.dataset.city;
-    citySelect.value = selectedCity;
-    bookingCity.value = selectedCity;
-    applyMapSelection(selectedCity);
-    document.getElementById("city-detail-view").scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-});
+.hero-copy h1 { font-size: clamp(2.8rem, 6vw, 5rem); max-width: 680px; }
+.lead { margin-top: 22px; color: var(--muted); line-height: 1.9; max-width: 640px; }
+.section-heading { margin-bottom: 28px; }
+.section-heading h2 { font-size: clamp(2rem, 4vw, 3rem); }
 
-itineraryForm.addEventListener("submit", generateItinerary);
-bookingForm.addEventListener("submit", handleBookingSubmit);
-['bookingCity', 'bookingExperience', 'bookingGuests', 'bookingDate'].forEach((id) => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('input', updateBookingSummary);
-  if (el) el.addEventListener('change', updateBookingSummary);
-});
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
 
-renderExperienceCards();
-renderDestinationCards();
-populateCitySelect();
-renderCityDetail("مراكش");
-renderCityDetailPanel("مراكش");
-applyMapSelection("مراكش");
-updateBookingSummary();
-yearNode.textContent = new Date().getFullYear();
+.primary, .secondary, .filter, .detail-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #0d1728;
+  box-shadow: 0 18px 40px rgba(245,158,11,0.25);
+}
+.secondary {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--line);
+}
+.detail-button {
+  background: rgba(125,211,252,0.08);
+  border-color: rgba(125,211,252,0.2);
+  color: var(--text);
+}
+.primary:hover, .secondary:hover, .filter:hover, .detail-button:hover, .destination-card:hover { transform: translateY(-1px); }
+
+.stats {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin: 36px 0 0;
+}
+.stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+}
+.stats strong { color: var(--text); font-size: 1.8rem; }
+
+.hero-card {
+  position: relative;
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(15,23,42,0.78), rgba(19,31,49,0.94));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(34,197,94,0.18), transparent 30%), radial-gradient(circle at 70% 65%, rgba(125,211,252,0.12), transparent 30%);
+}
+
+.mini-map {
+  position: absolute;
+  inset: 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(135deg, rgba(245,158,11,0.22), rgba(37,99,235,0.08)), linear-gradient(180deg, rgba(28,41,59,0.94), rgba(15,23,42,0.94));
+}
+.mini-map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0 20%, rgba(255,255,255,0.12) 20% 21%, transparent 21% 40%, rgba(255,255,255,0.12) 40% 41%, transparent 41%), linear-gradient(transparent 0 25%, rgba(255,255,255,0.12) 25% 26%, transparent 26% 50%, rgba(255,255,255,0.12) 50% 51%, transparent 51%);
+}
+.pin {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbbf24, #f97316);
+  box-shadow: 0 0 0 7px rgba(251,191,36,0.18);
+}
+.pin-1 { top: 30%; left: 28%; }
+.pin-2 { top: 48%; left: 58%; }
+.pin-3 { top: 66%; left: 38%; }
+.pin-4 { top: 32%; right: 26%; }
+
+.destination-info {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 24px;
+  background: rgba(15,23,42,0.72);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  padding: 18px 20px;
+}
+.destination-info p, .destination-info small { margin: 0; color: var(--muted); }
+.destination-info h2 { margin: 6px 0; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+
+.highlight-grid, .experience-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.feature, .experience-card, .destination-card, .planner-panel, .itinerary-panel, .faq-list details, .city-detail, .map-panel, .detail-panel, .booking-form-wrap, .booking-summary {
+  background: rgba(17,24,39,0.72);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+}
+.feature, .experience-card { padding: 24px 20px; }
+.icon {
+  display: inline-flex;
+  width: 54px;
+  height: 54px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: rgba(245,158,11,0.12);
+  font-size: 1.9rem;
+}
+.feature h3, .experience-card h3 { margin: 20px 0 12px; }
+.feature p, .experience-card p, .destination-card p, .faq-list details p, .city-detail p, .detail-summary, .booking-summary p { margin: 0; color: var(--muted); line-height: 1.8; }
+
+.split { display: flex; gap: 20px; align-items: end; justify-content: space-between; }
+.filter-bar { display: flex; flex-wrap: wrap; gap: 10px; }
+.filter {
+  background: rgba(255,255,255,0.02);
+  border-color: var(--line);
+  color: var(--text);
+  cursor: pointer;
+  min-height: 42px;
+  padding: 0 18px;
+}
+.filter.active { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); }
+
+.search-box { margin: 18px 0 24px; }
+.search-box input {
+  width: 100%;
+  min-height: 54px;
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0 18px;
+}
+.search-box input::placeholder { color: var(--muted); }
+
+.destination-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.destination-card { overflow: hidden; }
+.destination-image {
+  min-height: 250px;
+  display: flex;
+  align-items: end;
+  padding: 22px;
+  background-position: center;
+  background-size: cover;
+}
+.destination-image span {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(15,23,42,0.7);
+  border: 1px solid rgba(255,255,255,0.14);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.destination-card-content { padding: 18px 18px 22px; }
+.destination-card h3 { margin: 0 0 8px; font-size: 1.45rem; }
+.destination-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.destination-meta span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(125,211,252,0.08);
+  color: #d7f3ff;
+  border: 1px solid rgba(125,211,252,0.18);
+  font-size: 0.76rem;
+}
+
+.detail-panel { overflow: hidden; }
+.detail-hero {
+  min-height: 290px;
+  padding: 24px;
+  display: flex;
+  align-items: end;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.detail-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(12,17,27,0.12), rgba(12,17,27,0.82));
+}
+.detail-hero-content { position: relative; z-index: 1; }
+.detail-hero h3 { font-size: clamp(2.3rem, 4vw, 3.3rem); margin: 0 0 8px; }
+.detail-hero p { margin: 0; color: rgba(255,255,255,0.9); max-width: 680px; }
+.detail-body {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 20px;
+  padding: 24px;
+}
+.detail-facts, .detail-experiences {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+}
+.detail-facts ul, .detail-experiences ul { margin: 14px 0 0; padding-inline-start: 20px; color: var(--muted); line-height: 1.9; }
+
+.map-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; align-items: center; }
+.map-panel { padding: 20px; }
+.morocco-map { width: 100%; height: 520px; display: block; }
+.map-shape { fill: rgba(125,211,252,0.12); stroke: rgba(125,211,252,0.42); stroke-width: 3; }
+.map-point {
+  fill: rgba(245,158,11,0.9);
+  stroke: rgba(255,255,255,0.8);
+  stroke-width: 3;
+  cursor: pointer;
+  transition: transform 0.2s ease, fill 0.2s ease;
+}
+.map-point:hover, .map-point.active { fill: #22c55e; transform: scale(1.2); }
+
+.city-detail { padding: 22px 20px; min-height: 300px; }
+.city-detail .badge {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(34,197,94,0.12);
+  color: #baf9da;
+  border: 1px solid rgba(34,197,94,0.24);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.city-detail h3 { margin: 18px 0 14px; font-size: clamp(1.8rem, 2.8vw, 2.5rem); }
+.city-detail ul { margin: 16px 0 0; padding-inline-start: 20px; color: var(--muted); line-height: 1.9; }
+
+.planner-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 20px; }
+.planner-panel, .itinerary-panel { padding: 22px 20px; }
+.compact { margin-bottom: 20px; }
+.itinerary-form, .booking-form { display: grid; gap: 18px; }
+.itinerary-form label, .booking-form label { display: grid; gap: 8px; color: var(--muted); }
+.itinerary-form select, .booking-form select, .booking-form input, .booking-form textarea {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  padding: 12px 14px;
+}
+.booking-form input::placeholder, .booking-form textarea::placeholder { color: var(--muted); }
+.field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.full-width { width: 100%; border: none; cursor: pointer; }
+.itinerary-output { display: grid; gap: 12px; margin-top: 18px; }
+.route-step {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--line);
+}
+.route-step strong { display: block; margin-bottom: 6px; }
+
+.experience-card .tag {
+  display: inline-block;
+  background: rgba(34,197,94,0.12);
+  color: #afffdb;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(34,197,94,0.2);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.booking-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 20px; }
+.booking-form-wrap, .booking-summary { padding: 22px 20px; }
+.booking-summary h3 { margin: 0 0 12px; font-size: 1.8rem; }
+.summary-box {
+  margin-top: 18px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 200px; gap: 16px; }
+.gallery-item {
+  display: flex;
+  align-items: end;
+  justify-content: flex-start;
+  border-radius: 20px;
+  padding: 18px;
+  color: white;
+  font-weight: 700;
+  border: 1px solid var(--line);
+  background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.42)), linear-gradient(135deg, #f59e0b, #0ea5e9);
+}
+.gallery-item:nth-child(1) { background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.42)), linear-gradient(135deg, #f59e0b, #a16207); }
+.gallery-item:nth-child(2) { background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.42)), linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.gallery-item:nth-child(3) { background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.42)), linear-gradient(135deg, #34d399, #059669); }
+.gallery-item:nth-child(4) { background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.42)), linear-gradient(135deg, #f472b6, #db2777); }
+.gallery-item.tall { grid-row: span 2; }
+.gallery-item.wide { grid-column: span 2; }
+
+.faq-list { display: grid; gap: 14px; }
+.faq-list details { padding: 18px 20px; }
+.faq-list summary { cursor: pointer; font-weight: 700; }
+.faq-list details p { margin-top: 12px; }
+
+.footer { padding: 18px 0 34px; border-top: 1px solid var(--line); }
+.footer-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--muted); }
+
+.city-page-main, .booking-page-main { padding: 40px 0 70px; }
+.city-page-content { display: grid; gap: 18px; }
+.city-page-wrap { display: grid; }
+.booking-page-grid { padding-top: 24px; }
+
+@media (max-width: 900px) {
+  .hero-grid, .highlight-grid, .destination-grid, .experience-grid, .planner-grid, .map-layout, .detail-body, .booking-grid, .field-row { grid-template-columns: 1fr; }
+  .split { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 620px) {
+  nav { gap: 8px; font-size: 0.84rem; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .primary, .secondary, .detail-button { width: 100%; }
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-item, .gallery-item.wide, .gallery-item.tall { grid-column: auto; grid-row: auto; min-height: 180px; }
+}
