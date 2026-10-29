@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Morocco Atlas</title>
+    <meta
+      name="description"
+      content="Interactive atlas and destination guide for Morocco."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand">
+          <span class="logo">M</span>
+          <span>Morocco Atlas</span>
+        </div>
+        <nav>
+          <a href="#discover">Discover</a>
+          <a href="#regions">Regions</a>
+          <a href="#culture">Culture</a>
+          <a href="#journey">Journey</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">North Africa • Kingdom of Morocco</p>
+            <h1>Explore a land of colors, history, and desert magic.</h1>
+            <p class="lead">
+              From the Atlantic coast to the Sahara, Morocco blends ancient heritage,
+              vibrant souks, golden dunes, and modern innovation in one unforgettable
+              journey.
+            </p>
+            <div class="actions">
+              <a href="#regions" class="primary">Explore regions</a>
+              <a href="#culture" class="secondary">Culture guide</a>
+            </div>
+            <ul class="stats">
+              <li><strong>12</strong><span>Regions</span></li>
+              <li><strong>4</strong><span>Major coasts</span></li>
+              <li><strong>3</strong><span>Great deserts</span></li>
+            </ul>
+          </div>
+
+          <div class="hero-card" aria-label="Morocco destination card">
+            <div class="card-glow"></div>
+            <div class="mini-map">
+              <span class="pin pin-1"></span>
+              <span class="pin pin-2"></span>
+              <span class="pin pin-3"></span>
+              <span class="pin pin-4"></span>
+            </div>
+            <div class="destination-info">
+              <p>Featured city</p>
+              <h2>Marrakech</h2>
+              <small>Red City • Medina • Gardens</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="discover" class="highlights">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Why Morocco</p>
+            <h2>At the crossroads of continents</h2>
+          </div>
+
+          <div class="highlight-grid">
+            <article class="feature">
+              <span class="icon">🕌</span>
+              <h3>Historic cities</h3>
+              <p>Walk through centuries of art, palaces, mosques, and medinas.</p>
+            </article>
+            <article class="feature">
+              <span class="icon">🏜️</span>
+              <h3>Desert adventure</h3>
+              <p>Experience camel rides, starlit nights, and vast Saharan landscapes.</p>
+            </article>
+            <article class="feature">
+              <span class="icon">🌊</span>
+              <h3>Atlantic coast</h3>
+              <p>Enjoy beaches, surf, and cliffside towns along the western edge.</p>
+            </article>
+            <article class="feature">
+              <span class="icon">🧺</span>
+              <h3>Market culture</h3>
+              <p>Explore spice stalls, textiles, ceramics, and authentic local flavors.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="regions" class="regions">
+        <div class="container">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Regional explorer</p>
+              <h2>Choose a destination</h2>
+            </div>
+          </div>
+
+          <div class="region-layout">
+            <div class="region-list" id="regionList" aria-label="Regions list"></div>
+            <aside class="region-detail" id="regionDetail" aria-live="polite"></aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="culture" class="culture">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Cultural richness</p>
+            <h2>Tradition meets modern life</h2>
+          </div>
+
+          <div class="culture-grid">
+            <div class="culture-card">
+              <h3>Language</h3>
+              <p>Arabic and Amazigh are core to the nation’s identity, with French widely used in urban life and diplomacy.</p>
+            </div>
+            <div class="culture-card">
+              <h3>Cuisine</h3>
+              <p>Couscous, tagine, harira, mint tea, and fresh market produce define daily life and hospitality.</p>
+            </div>
+            <div class="culture-card">
+              <h3>Crafts</h3>
+              <p>From leatherwork and ceramics to rugs and lanterns, Morocco is renowned for authentic craftsmanship.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="journey" class="journey">
+        <div class="container journey-box">
+          <div>
+            <p class="eyebrow">Plan your route</p>
+            <h2>Build a memorable Moroccan story.</h2>
+          </div>
+          <a href="#top" class="primary">Start exploring</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>© <span id="year"></span> Morocco Atlas</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
