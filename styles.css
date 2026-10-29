@@ -11,7 +11,7 @@
   --primary-dark: #d97706;
   --secondary: #24c38e;
   --cyan: #8ad7ff;
-  --shadow: rgba(15, 23, 42, 0.5);
+  --shadow: rgba(15, 23, 42, 0.55);
 }
 
 * {
@@ -42,7 +42,9 @@ img {
 }
 
 button,
-select {
+select,
+input,
+textarea {
   font: inherit;
 }
 
@@ -116,14 +118,15 @@ nav a:hover,
   color: var(--cyan);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  font-size: 0.73rem;
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
 .hero-copy h1,
 .section-heading h2,
 .itinerary-panel h3,
-.planner-panel h2 {
+.planner-panel h2,
+.booking-form-wrap h2 {
   margin: 0;
   line-height: 1.08;
   letter-spacing: -0.05em;
@@ -152,7 +155,8 @@ nav a:hover,
 
 .primary,
 .secondary,
-.filter {
+.filter,
+.detail-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -175,9 +179,18 @@ nav a:hover,
   border-color: var(--line);
 }
 
+.detail-button {
+  background: rgba(125, 211, 252, 0.06);
+  border-color: rgba(125, 211, 252, 0.2);
+  color: var(--text);
+  min-height: 42px;
+  padding: 0 18px;
+}
+
 .primary:hover,
 .secondary:hover,
 .filter:hover,
+.detail-button:hover,
 .destination-card:hover {
   transform: translateY(-1px);
 }
@@ -291,7 +304,8 @@ section {
 }
 
 .highlight-grid,
-.culture-grid {
+.culture-grid,
+.experience-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
@@ -304,14 +318,19 @@ section {
 .itinerary-panel,
 .faq-list details,
 .city-detail,
-.map-panel {
+.map-panel,
+.detail-panel,
+.experience-card,
+.booking-summary,
+.booking-form-wrap {
   background: rgba(17, 24, 39, 0.72);
   border: 1px solid var(--line);
   border-radius: 22px;
 }
 
 .feature,
-.culture-card {
+.culture-card,
+.experience-card {
   padding: 24px 20px;
 }
 
@@ -327,7 +346,8 @@ section {
 }
 
 .feature h3,
-.culture-card h3 {
+.culture-card h3,
+.experience-card h3 {
   margin: 20px 0 12px;
   font-size: 1.28rem;
 }
@@ -337,7 +357,11 @@ section {
 .destination-card p,
 .itinerary-output p,
 .faq-list details p,
-.city-detail p {
+.city-detail p,
+.detail-summary,
+.experience-card p,
+.booking-summary p,
+.booking-form label {
   margin: 0;
   color: var(--muted);
   line-height: 1.8;
@@ -368,6 +392,24 @@ section {
 .filter.active {
   background: rgba(245, 158, 11, 0.12);
   border-color: rgba(245, 158, 11, 0.4);
+}
+
+.search-box {
+  margin: 18px 0 24px;
+}
+
+.search-box input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  border-radius: 16px;
+  min-height: 54px;
+  padding: 0 18px;
+}
+
+.search-box input::placeholder {
+  color: var(--muted);
 }
 
 .destination-grid {
@@ -424,6 +466,71 @@ section {
   color: #d7f3ff;
   border: 1px solid rgba(125, 211, 252, 0.18);
   font-size: 0.76rem;
+}
+
+.detail-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.detail-hero {
+  min-height: 290px;
+  padding: 24px;
+  display: flex;
+  align-items: end;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.detail-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(12, 17, 27, 0.14), rgba(12, 17, 27, 0.82));
+}
+
+.detail-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.detail-hero h3 {
+  font-size: clamp(2.3rem, 4vw, 3.3rem);
+  margin: 0 0 8px;
+}
+
+.detail-hero p {
+  max-width: 680px;
+  margin: 0;
+  color: rgba(255,255,255,0.9);
+}
+
+.detail-body {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 20px;
+  padding: 24px;
+}
+
+.detail-facts,
+.detail-experiences {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.detail-facts ul,
+.detail-experiences ul {
+  margin: 14px 0 0;
+  padding-inline-start: 20px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+.detail-summary {
+  margin-top: 16px;
 }
 
 .map-layout {
@@ -507,23 +614,39 @@ section {
   margin-bottom: 20px;
 }
 
-.itinerary-form {
+.itinerary-form,
+.booking-form {
   display: grid;
   gap: 18px;
 }
 
-.itinerary-form label {
+.itinerary-form label,
+.booking-form label {
   display: grid;
   gap: 8px;
   color: var(--muted);
 }
 
-.itinerary-form select {
+.itinerary-form select,
+.booking-form select,
+.booking-form input,
+.booking-form textarea {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: rgba(255,255,255,0.02);
   color: var(--text);
   padding: 12px 14px;
+}
+
+.booking-form input::placeholder,
+.booking-form textarea::placeholder {
+  color: var(--muted);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .full-width {
@@ -548,6 +671,50 @@ section {
 .route-step strong {
   display: block;
   margin-bottom: 6px;
+}
+
+.experience-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.experience-card .tag {
+  display: inline-block;
+  background: rgba(34, 197, 94, 0.12);
+  color: #afffdb;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 20px;
+}
+
+.booking-form-wrap,
+.booking-summary {
+  padding: 22px 20px;
+}
+
+.booking-summary {
+  min-height: 240px;
+}
+
+.booking-summary h3 {
+  margin: 0 0 12px;
+  font-size: 1.8rem;
+}
+
+.booking-summary .summary-box {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--line);
 }
 
 .gallery-grid {
@@ -630,9 +797,13 @@ section {
   .hero-grid,
   .highlight-grid,
   .destination-grid,
+  .experience-grid,
   .planner-grid,
   .culture-grid,
-  .map-layout {
+  .map-layout,
+  .detail-body,
+  .booking-grid,
+  .field-row {
     grid-template-columns: 1fr;
   }
 
@@ -656,7 +827,8 @@ section {
   }
 
   .primary,
-  .secondary {
+  .secondary,
+  .detail-button {
     width: 100%;
   }
 

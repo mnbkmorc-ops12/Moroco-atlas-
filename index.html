@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>أطلس المغرب | اكتشف المغرب</title>
+    <title>أطلس المغرب | موقع سياحي متكامل</title>
     <meta
       name="description"
-      content="تطبيق عربي متكامل لاكتشاف المغرب، الوجهات السياحية، الخطة اليومية، والخريطة التفاعلية."
+      content="موقع سفر مغربي عربي متكامل يضم الوجهات، الخريطة، تفاصيل المدن، التخطيط، وتجربة الحجز."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +19,7 @@
   <body>
     <header class="topbar">
       <div class="container nav">
-        <a href="#home" class="brand" aria-label="العودة إلى الأعلى">
+        <a href="#home" class="brand" aria-label="عودة إلى الأعلى">
           <span class="logo">م</span>
           <span>أطلس المغرب</span>
         </a>
@@ -29,6 +29,7 @@
           <a href="#destinations">الوجهات</a>
           <a href="#map-section">الخريطة</a>
           <a href="#planner">التخطيط</a>
+          <a href="#booking">الحجز</a>
           <a href="#faq">الأسئلة</a>
         </nav>
       </div>
@@ -42,7 +43,7 @@
             <h1>اكتشف ألوان التاريخ، الساحل، والصحراء في قلب المغرب.</h1>
             <p class="lead">
               من مراكش إلى طنجة، ومن الدار البيضاء إلى الصحراء الكبرى، أضف رحلتك إلى
-              تجربة مغربية مليئة بالهوية، الثقافة، والطبيعة الساحرة.
+              تجربة مغربية متكاملة تجمع بين الثقافة، الطبيعة، والرفاهية.
             </p>
 
             <div class="actions">
@@ -78,29 +79,29 @@
         <div class="container">
           <div class="section-heading">
             <p class="eyebrow">لماذا المغرب؟</p>
-            <h2>كل زاوية تحكي قصة جديدة</h2>
+            <h2>كل زاوية تحمل قصة جديدة</h2>
           </div>
 
           <div class="highlight-grid">
             <article class="feature">
               <span class="icon">🕌</span>
               <h3>تراث إمبراطوري</h3>
-              <p>مدن تاريخية، قصور، وأسواق غنية بالحرف التقليدية والهوية المغربية.</p>
+              <p>مدن تاريخية، قصور، وأحياء قديمة مملوءة بالحرف والموروث الثقافي.</p>
             </article>
             <article class="feature">
               <span class="icon">🏜️</span>
               <h3>رحلات صحراوية</h3>
-              <p>أيام في الصحراء، ليالٍ تحت النجوم، وركوب الجمال عبر الكثبان الذهبية.</p>
+              <p>مسافات رملية، نجوم ليلية، وكهف صخري يُحيي أجواء العصور المدهشة.</p>
             </article>
             <article class="feature">
               <span class="icon">🌊</span>
               <h3>الساحل الأطلسي</h3>
-              <p>ممرات بحرية، شواطئ هادئة، ومناطق عيش ساحرة على طول الساحل.</p>
+              <p>شواطئ هادئة، كوارث طبيعية جميلة، ومغامرات بحرية مريحة.</p>
             </article>
             <article class="feature">
               <span class="icon">🧺</span>
               <h3>الثقافة المحلية</h3>
-              <p>مقاهي، أطعمة مغربية أصيلة، وحرف يدوية تعكس روح المنطقة.</p>
+              <p>مقاهي، أطعمة أصيلة، أسواق، وحرف يدوية تنقل روح المغرب الحية.</p>
             </article>
           </div>
         </div>
@@ -122,7 +123,21 @@
             </div>
           </div>
 
+          <div class="search-box">
+            <input id="citySearch" type="search" placeholder="ابحث عن مدينة أو تجربة..." aria-label="بحث عن مدينة" />
+          </div>
+
           <div class="destination-grid" id="destinationGrid"></div>
+        </div>
+      </section>
+
+      <section id="city-detail-view" class="city-detail-view">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">التفاصيل</p>
+            <h2>نظرة عميقة على المدينة المختارة</h2>
+          </div>
+          <div id="cityDetailPanel" class="detail-panel"></div>
         </div>
       </section>
 
@@ -142,7 +157,6 @@
                 <circle class="map-point" data-city="الرباط" cx="220" cy="290" r="8"></circle>
                 <circle class="map-point" data-city="فاس" cx="322" cy="260" r="8"></circle>
                 <circle class="map-point" data-city="طنجة" cx="118" cy="240" r="8"></circle>
-                <circle class="map-point" data-city="مراكش" cx="260" cy="280" r="9"></circle>
                 <circle class="map-point" data-city="شفشاون" cx="178" cy="185" r="8"></circle>
                 <circle class="map-point" data-city="الصحراء" cx="318" cy="420" r="8"></circle>
                 <circle class="map-point" data-city="أكادير" cx="212" cy="400" r="8"></circle>
@@ -189,6 +203,80 @@
         </div>
       </section>
 
+      <section class="experience-section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">تجارب</p>
+            <h2>أنشطة لا تُنسى</h2>
+          </div>
+
+          <div class="experience-grid" id="experienceGrid"></div>
+        </div>
+      </section>
+
+      <section id="booking" class="booking-section">
+        <div class="container booking-grid">
+          <div class="booking-form-wrap">
+            <div class="section-heading compact">
+              <p class="eyebrow">الحجز</p>
+              <h2>احجز تجربتك</h2>
+            </div>
+
+            <form id="bookingForm" class="booking-form">
+              <div class="field-row">
+                <label>
+                  الاسم الكامل
+                  <input type="text" id="bookingName" placeholder="اكتب اسمك" required />
+                </label>
+                <label>
+                  البريد الإلكتروني
+                  <input type="email" id="bookingEmail" placeholder="example@mail.com" required />
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label>
+                  المدينة
+                  <select id="bookingCity"></select>
+                </label>
+                <label>
+                  نوع التجربة
+                  <select id="bookingExperience">
+                    <option value="رحلة مدن">رحلة مدن</option>
+                    <option value="رحلة صحراوية">رحلة صحراوية</option>
+                    <option value="رحلة بحرية">رحلة بحرية</option>
+                    <option value="رحلة جبلية">رحلة جبلية</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label>
+                  التاريخ
+                  <input type="date" id="bookingDate" required />
+                </label>
+                <label>
+                  عدد الأفراد
+                  <input type="number" id="bookingGuests" min="1" max="20" value="2" required />
+                </label>
+              </div>
+
+              <label>
+                ملاحظات إضافية
+                <textarea id="bookingNotes" rows="4" placeholder="أضف ملاحظاتك أو طلباتك..."></textarea>
+              </label>
+
+              <button type="submit" class="primary full-width">تأكيد الطلب</button>
+            </form>
+          </div>
+
+          <aside class="booking-summary" id="bookingSummary">
+            <h3>ملخص الطلب</h3>
+            <p>اختر المدينة، ثم املأ تفاصيل الحجز لتأكيد الطلب.</p>
+          </aside>
+        </div>
+      </section>
+
       <section class="gallery">
         <div class="container">
           <div class="section-heading">
@@ -215,15 +303,15 @@
           <div class="faq-list">
             <details open>
               <summary>ما أفضل وقت للزيارة؟</summary>
-              <p>أفضل وقت هو الربيع (من مارس إلى مايو) والخريف (من سبتمبر إلى نوفمبر) بسبب المناخ المعتدل.</p>
+              <p>أفضل وقت هو الربيع والخريف بسبب الطقس المعتدل والأجواء المناسبة للمشي والسفر.</p>
             </details>
             <details>
               <summary>هل أحتاج فيزا؟</summary>
-              <p>يعتمد ذلك على جنسيتك، لكن العديد من الزوار يمكنهم الدخول دون فيزا أو بفيزا عند الوصول لفترات قصيرة.</p>
+              <p>يعتمد ذلك على جنسيتك، لكن العديد من الزوار يمكنهم الدخول دون فيزا أو بفيزا عند الوصول.</p>
             </details>
             <details>
               <summary>هل المغرب آمن للسياح؟</summary>
-              <p>نعم، المغرب عادةً آمن، مع ضرورة الالتزام بالاحتياطات المعتادة والحذر في الأماكن المزدحمة.</p>
+              <p>نعم، لكنه يفضل الالتزام بالاحتياطات المعتادة والحرص في الأماكن المزدحمة.</p>
             </details>
           </div>
         </div>
